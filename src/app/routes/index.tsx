@@ -1,9 +1,9 @@
 import { DefaultLayout } from "app/components/Layouts";
-import Home from "app/pages/Home";
-import React from "react";
+import React, { lazy } from "react";
 import { useRoutes } from "react-router-dom";
-
 import path from "./path";
+
+const Home = lazy(() => import("app/pages/Home"));
 
 export default function Router() {
   return useRoutes([
