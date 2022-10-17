@@ -8,7 +8,10 @@ export function withLoading(WrappedComponent: React.ElementType) {
       <>
         {loading && (
           <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{
+              color: (theme) => theme.palette.common.white,
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
             open={loading}
           >
             <CircularProgress size={60} thickness={4} color="primary" />

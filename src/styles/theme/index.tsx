@@ -19,7 +19,7 @@ const themeOptions: ThemeOptions = {
   typography,
 };
 
-let theme = createTheme(themeOptions);
+export let theme = createTheme(themeOptions);
 theme = responsiveFontSizes(theme);
 
 export default function ThemeConfig(props: ThemeConfigProps) {

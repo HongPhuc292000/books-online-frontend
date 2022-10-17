@@ -1,7 +1,9 @@
 {
-    "content": {
-        "functional": "Functional",
-        "class": "Class",
-        "text": "This is text"
-    }
+  "common": {
+    "logoText": "BooksOnline",
+    "home": "Home",
+    "bookCategories": "Book categories",
+    "reviews": "Review",
+    "searchPlaceholder": "Search books"
+  }
 }
