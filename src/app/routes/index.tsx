@@ -24,6 +24,12 @@ export default function Router() {
         {
           path: path.bookCategories,
           element: <BookCategories />,
+          children: [
+            {
+              path: path.bookCategory,
+              element: <BookCategories />,
+            },
+          ],
         },
         {
           path: path.reviews,

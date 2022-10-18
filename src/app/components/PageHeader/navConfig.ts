@@ -1,15 +1,24 @@
-export const pages = [
+import path from "app/routes/path";
+import { HeaderNavChangePageI } from "types";
+
+export const pages: HeaderNavChangePageI[] = [
   {
     title: "home",
-    link: "/home",
+    link: path.home,
   },
   {
     title: "bookCategories",
-    link: "/bookCategories",
+    link: path.bookCategories,
+    children: [
+      {
+        title: "test",
+        link: `/bookCategories/test`,
+      },
+    ],
   },
   {
     title: "reviews",
-    link: "/reviews",
+    link: path.reviews,
   },
 ];
 

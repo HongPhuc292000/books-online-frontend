@@ -1,14 +1,7 @@
-import { Typography, Grid } from "@mui/material";
-import palette from "styles/theme/palette";
+import PageHeader from "../PageHeader";
 
 const LazyLoad = () => {
-  return (
-    <Grid sx={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}>
-      <Typography variant="body1" sx={{ color: palette.primary.main }}>
-        Vui lòng đợi...
-      </Typography>
-    </Grid>
-  );
+  return <PageHeader />;
 };
 
 export default LazyLoad;

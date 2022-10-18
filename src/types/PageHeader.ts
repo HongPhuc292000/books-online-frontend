@@ -1,4 +1,5 @@
 export interface HeaderNavChangePageI {
   title: string;
-  link?: string;
+  link: string;
+  children?: HeaderNavChangePageI[];
 }

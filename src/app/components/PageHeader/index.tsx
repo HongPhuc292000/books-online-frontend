@@ -15,10 +15,13 @@ import { useTranslation } from "react-i18next";
 import { styled, alpha, useTheme } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-import { Link, useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { pages, settings } from "./navConfig";
 import MainNavLink from "./components/MainNavLink";
+import { HeaderNavChangePageI } from "types";
+import path from "app/routes/path";
+import MobileNav from "./components/MobileNav";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,30 +63,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const PageHeader = () => {
   const { t } = useTranslation();
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [openMobileNav, setOpenMobileNav] = React.useState<boolean>(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const theme = useTheme();
-  const linkStyled = useMemo(() => {
-    return {
-      display: "flex",
-      color: theme.palette.common.white,
-      textDecoration: "none",
-    };
-  }, [theme]);
   const navigate = useNavigate();
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+  const handleOpenMobileNav = () => {
+    setOpenMobileNav(true);
   };
 
-  const handleCloseNavMenu = (target?: string) => {
-    setAnchorElNav(null);
-    if (target) {
-      navigate(target);
-    }
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseUserMenu = () => {
@@ -97,94 +87,72 @@ const PageHeader = () => {
           disableGutters
           sx={{ justifyContent: { xs: "space-between", md: "initial" } }}
         >
-          <Box sx={{ display: { xs: "none", md: "block" } }}>
-            <Link to="/" style={linkStyled}>
-              <MenuBookIcon
-                sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-              />
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                sx={{
-                  mr: 2,
-                  display: { xs: "none", md: "flex" },
-                  fontFamily: "monospace",
-                  fontWeight: 700,
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
-              >
-                {t("common.logoText")}
-              </Typography>
-            </Link>
+          {/* Logo in desktop */}
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, cursor: "pointer" }}
+            onClick={() => navigate(path.home)}
+          >
+            <MenuBookIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              {t("common.logoText")}
+            </Typography>
           </Box>
+          {/* Main nav in mobile */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={handleOpenMobileNav}
               color="inherit"
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={() => handleCloseNavMenu()}
+            <MobileNav
+              openMobileNav={openMobileNav}
+              setOpenMobileNav={setOpenMobileNav}
+            />
+          </Box>
+          {/* Logo in mobile */}
+          <Box
+            sx={{ display: { xs: "flex", md: "none" }, cursor: "pointer" }}
+            onClick={() => navigate(path.home)}
+          >
+            <MenuBookIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
               sx={{
-                display: { xs: "block", md: "none" },
+                display: { xs: "flex", md: "none" },
+                flexGrow: 1,
+                fontFamily: "monospace",
+                fontWeight: 700,
+                color: "inherit",
+                textDecoration: "none",
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page.title} onClick={() => handleCloseNavMenu()}>
-                  <Typography textAlign="center">{page.title}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <Link to="/" style={linkStyled}>
-              <MenuBookIcon
-                sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-              />
-              <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                sx={{
-                  display: { xs: "flex", md: "none" },
-                  flexGrow: 1,
-                  fontFamily: "monospace",
-                  fontWeight: 700,
-                  letterSpacing: ".3rem",
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
-              >
-                {t("common.logoText")}
-              </Typography>
-            </Link>
+              {t("common.logoText")}
+            </Typography>
           </Box>
 
           {/* Main nav in Desktop */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <MainNavLink page={page} />
+            {pages.map((page: HeaderNavChangePageI) => (
+              <MainNavLink key={page.title} page={page} />
             ))}
           </Box>
+          {/* Searchbar in desktop */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -194,6 +162,7 @@ const PageHeader = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
+          {/* Profile */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -201,11 +170,11 @@ const PageHeader = () => {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: { xs: 1, sm: 1.5, md: 2 } }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: "top",
+                vertical: "bottom",
                 horizontal: "right",
               }}
               keepMounted
