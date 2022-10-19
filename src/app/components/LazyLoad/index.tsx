@@ -1,7 +1,7 @@
-import PageHeader from "../PageHeader";
+import { Typography } from "@mui/material";
 
 const LazyLoad = () => {
-  return <PageHeader />;
+  return <Typography color="primary">{"Vui lòng đợi"}</Typography>;
 };
 
 export default LazyLoad;

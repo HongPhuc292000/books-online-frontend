@@ -1,20 +1,10 @@
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Divider, Drawer, IconButton, List, styled } from "@mui/material";
 import * as React from "react";
-import {
-  Box,
-  Drawer,
-  List,
-  Divider,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
-  styled,
-} from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { memo, useMemo } from "react";
+import { memo } from "react";
+
+import MainNav from "./MainNav";
+import { pages } from "../../navConfig";
 
 interface Props {
   openMobileNav: boolean;
@@ -43,8 +33,14 @@ const MobileNav = memo(({ openMobileNav, setOpenMobileNav }: Props) => {
       setOpenMobileNav(open);
     };
 
-  const ListMainNav = useMemo(
-    () => (
+  return (
+    <Drawer anchor="left" open={openMobileNav} onClose={toggleDrawer(false)}>
+      <DrawerHeader>
+        <IconButton onClick={toggleDrawer(false)}>
+          <CloseIcon fontSize="large" />
+        </IconButton>
+      </DrawerHeader>
+      <Divider />
       <Box
         sx={{ width: 250 }}
         role="presentation"
@@ -52,31 +48,11 @@ const MobileNav = memo(({ openMobileNav, setOpenMobileNav }: Props) => {
         // onKeyDown={toggleDrawer(false)}
       >
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
+          {pages.map((page) => (
+            <MainNav key={page.title} page={page} />
           ))}
         </List>
       </Box>
-    ),
-    []
-  );
-
-  return (
-    <Drawer anchor="left" open={openMobileNav} onClose={toggleDrawer(false)}>
-      <DrawerHeader>
-        <IconButton onClick={toggleDrawer(false)}>
-          <ChevronLeftIcon fontSize="large" />
-        </IconButton>
-      </DrawerHeader>
-      <Divider />
-      {ListMainNav}
     </Drawer>
   );
 });

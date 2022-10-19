@@ -1,6 +1,6 @@
 import { Box, Button, Menu, MenuItem, useTheme } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { HeaderNavChangePageI } from "types";
@@ -15,7 +15,9 @@ const MainNavLink = memo(({ page }: Props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   let resolved = useResolvedPath(link);
-  let match = useMatch({ path: `${resolved.pathname}:category` });
+  let match = useMatch({
+    path: page.children ? `${resolved.pathname}:category` : resolved.pathname,
+  });
 
   // logic submenu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -40,7 +42,6 @@ const MainNavLink = memo(({ page }: Props) => {
     if (target) {
       navigate(target);
     }
-    handleCloseSubMenu();
   };
 
   return (
@@ -65,8 +66,8 @@ const MainNavLink = memo(({ page }: Props) => {
       {children ? (
         <Menu
           sx={{ mt: 2 }}
-          id="demo-positioned-menu"
-          aria-labelledby="demo-positioned-button"
+          id={`main-nav-positon-${title}`}
+          aria-labelledby={`main-nav-positon-${title}`}
           anchorEl={anchorEl}
           open={open}
           onClose={handleCloseSubMenu}
