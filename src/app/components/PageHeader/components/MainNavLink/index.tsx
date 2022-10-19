@@ -1,9 +1,10 @@
 import { Box, Button, Menu, MenuItem, useTheme } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HeaderNavChangePageI } from "types";
+import { useMatchPath } from "app/hooks/useMatchPath";
 
 interface Props {
   page: HeaderNavChangePageI;
@@ -14,10 +15,7 @@ const MainNavLink = memo(({ page }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const theme = useTheme();
-  let resolved = useResolvedPath(link);
-  let match = useMatch({
-    path: page.children ? `${resolved.pathname}:category` : resolved.pathname,
-  });
+  const { match } = useMatchPath(link);
 
   // logic submenu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -48,9 +46,9 @@ const MainNavLink = memo(({ page }: Props) => {
     <Box sx={{ "&:not(last-child)": { marginRight: 1 } }}>
       <Button
         sx={{
-          my: 2,
-          color: "white",
-          backgroundColor:
+          "my": 2,
+          "color": "white",
+          "backgroundColor":
             match || open
               ? theme.palette.primary.dark
               : theme.palette.primary.main,

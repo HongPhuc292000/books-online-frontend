@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useTranslation } from "react-i18next";
-import { styled, alpha, useTheme } from "@mui/material";
+import { styled, alpha } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { useNavigate } from "react-router-dom";
@@ -24,15 +24,15 @@ import path from "app/routes/path";
 import MobileNav from "./components/MobileNav";
 
 const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  marginRight: theme.spacing(1),
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "position": "relative",
+  "marginRight": theme.spacing(1),
+  "borderRadius": theme.shape.borderRadius,
+  "backgroundColor": alpha(theme.palette.common.white, 0.15),
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginLeft: theme.spacing(1),
-  width: "auto",
+  "marginLeft": theme.spacing(1),
+  "width": "auto",
   [theme.breakpoints.down("md")]: {
     display: "none",
   },
@@ -49,12 +49,12 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
+  "color": "inherit",
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "14ch",
+    "padding": theme.spacing(1, 1, 1, 0),
+    "paddingLeft": `calc(1em + ${theme.spacing(4)})`,
+    "transition": theme.transitions.create("width"),
+    "width": "14ch",
     "&:focus": {
       width: "24ch",
     },
@@ -65,7 +65,6 @@ const PageHeader = () => {
   const { t } = useTranslation();
   const [openMobileNav, setOpenMobileNav] = React.useState<boolean>(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const theme = useTheme();
   const navigate = useNavigate();
 
   const handleOpenMobileNav = () => {
