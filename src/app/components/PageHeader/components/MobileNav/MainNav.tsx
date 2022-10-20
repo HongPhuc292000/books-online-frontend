@@ -13,6 +13,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { useNavigate } from "react-router-dom";
 import { useMatchPath } from "app/hooks/useMatchPath";
+import { useTranslation } from "react-i18next";
 
 interface NavProps {
   page: HeaderNavChangePageI;
@@ -73,6 +74,7 @@ const MainNav = memo(({ page }: NavProps) => {
   const [openSubNav, setOpenSubNav] = React.useState<boolean>(false);
   const { match } = useMatchPath(link, children);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSelectNav = () => {
     if (children) {
@@ -94,7 +96,7 @@ const MainNav = memo(({ page }: NavProps) => {
           >
             {icon}
           </ListItemIcon>
-          <ListItemText primary={title} />
+          <ListItemText primary={t(`common.${title}`)} />
           {children ? (
             <>{openSubNav ? <ExpandLess /> : <ExpandMore />}</>
           ) : null}
