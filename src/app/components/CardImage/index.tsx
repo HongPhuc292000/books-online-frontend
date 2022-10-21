@@ -1,0 +1,1 @@
+export { SimpleCardImage } from "./SimpleCardImage";

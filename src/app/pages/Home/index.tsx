@@ -1,19 +1,30 @@
-import { Grid, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import { withLoading } from "app/components/HOC/withLoadingPage";
-import { TitlePageWithIcon } from "app/components/Label";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import BookCategories from "./components/BookCategories";
+import DoneBooks from "./components/DoneBooks";
+import HotBooks from "./components/HotBooks";
+import NewBooks from "./components/NewBooks";
+import ReadingBooks from "./components/ReadingBooks";
 
 const Home = () => {
   return (
-    <Box>
-      <Grid container>
-        <TitlePageWithIcon
-          title="Truyện hot"
-          icon={<LocalFireDepartmentIcon color="inherit" />}
-        />
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <HotBooks />
       </Grid>
-      <Grid container></Grid>
-    </Box>
+      <Grid item xs={12} container spacing={2}>
+        <Grid item xs={9}>
+          <NewBooks />
+        </Grid>
+        <Grid item xs={3}>
+          <ReadingBooks />
+          <BookCategories />
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <DoneBooks />
+      </Grid>
+    </Grid>
   );
 };
 

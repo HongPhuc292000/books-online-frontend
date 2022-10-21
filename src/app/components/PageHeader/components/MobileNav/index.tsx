@@ -41,12 +41,7 @@ const MobileNav = memo(({ openMobileNav, setOpenMobileNav }: Props) => {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <Box
-        sx={{ width: 250 }}
-        role="presentation"
-        // onClick={toggleDrawer(false)}
-        // onKeyDown={toggleDrawer(false)}
-      >
+      <Box sx={{ width: 250 }} role="presentation">
         <List>
           {pages.map((page) => (
             <MainNav key={page.title} page={page} />

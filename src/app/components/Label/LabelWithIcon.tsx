@@ -1,4 +1,4 @@
-import { Grid, useTheme } from "@mui/material";
+import { Box, Grid, useTheme } from "@mui/material";
 import { TitlePage } from ".";
 
 interface TitlePageWithIconProps {
@@ -12,9 +12,11 @@ export const TitlePageWithIcon = ({ title, icon }: TitlePageWithIconProps) => {
     <Grid
       container
       alignItems="center"
-      sx={{ p: "8px 0", color: theme.palette.primary.dark }}
+      sx={{ color: theme.palette.primary.dark, marginBottom: 2 }}
     >
-      <TitlePage mr={0.5}>{title}</TitlePage>
+      <Box sx={{ borderBottom: `1px solid ${theme.palette.primary.dark}` }}>
+        <TitlePage mr={0.5}>{title}</TitlePage>
+      </Box>
       {icon}
     </Grid>
   );

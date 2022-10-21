@@ -4,6 +4,13 @@
     "home": "Home",
     "bookCategories": "Book categories",
     "reviews": "Review",
-    "searchPlaceholder": "Search books"
+    "searchPlaceholder": "Search books",
+    "hotBooks": "",
+    "newBooks": "",
+    "doneBooks": "",
+    "readingBooks": ""
+  },
+  "enums": {
+    "ALL": "All"
   }
 }

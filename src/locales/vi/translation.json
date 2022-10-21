@@ -4,6 +4,13 @@
     "home": "Trang chủ",
     "bookCategories": "Thể loại sách",
     "reviews": "Góc review",
-    "searchPlaceholder": "Tìm kiếm sách"
+    "searchPlaceholder": "Tìm kiếm sách",
+    "hotBooks": "Sách đang hot",
+    "newBooks": "Sách mới cập nhật",
+    "doneBooks": "Sách đã hoàn thành",
+    "readingBooks": "Sách đang đọc"
+  },
+  "enums": {
+    "ALL": "Tất cả"
   }
 }

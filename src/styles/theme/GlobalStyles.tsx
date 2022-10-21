@@ -1,6 +1,7 @@
-import { GlobalStyles as GlobalThemeStyles } from "@mui/material";
+import { GlobalStyles as GlobalThemeStyles, useTheme } from "@mui/material";
 
 export default function GlobalStyles() {
+  const theme = useTheme();
   return (
     <GlobalThemeStyles
       styles={{
@@ -12,6 +13,10 @@ export default function GlobalStyles() {
         },
         html: {
           fontFamily: "Roboto, Arial, sans-serif",
+        },
+        body: {
+          backgroundImage: `linear-gradient(${theme.palette.grey[200]},${theme.palette.grey[50]})`,
+          backgroundRepeat: "no-repeat",
         },
       }}
     />

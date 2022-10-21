@@ -4,7 +4,7 @@ import PageHeader from "app/components/PageHeader";
 import React, { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
-function DefaultLayout() {
+const DefaultLayout = () => {
   return (
     <>
       <PageHeader />
@@ -18,6 +18,6 @@ function DefaultLayout() {
       </Container>
     </>
   );
-}
+};
 
 export default DefaultLayout;

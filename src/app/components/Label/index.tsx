@@ -8,5 +8,4 @@ export const TitlePage = styled(Typography)(({ theme }) => ({
   textTransform: "uppercase",
   padding: 1,
   color: theme.palette.primary.dark,
-  borderBottom: theme.palette.primary.dark,
 }));
