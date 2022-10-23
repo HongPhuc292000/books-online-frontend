@@ -1,0 +1,1 @@
+export { HomeTable } from "./HomeTable";

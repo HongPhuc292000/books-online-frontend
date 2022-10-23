@@ -6,7 +6,7 @@ import { FilterWithSelect } from "app/components/SelectOptionBox";
 import { useTranslation } from "react-i18next";
 import { SimpleCardImage } from "app/components/CardImage";
 
-const testArr = ["aa", "bb", "cc", "dd", "ee", "gg", "ff", "ii"];
+const testArr = ["aa", "bb", "cc", "dd", "ee", "gg", "ff", "ii", "ee"];
 
 const HotBooks = memo(() => {
   const { t } = useTranslation();
