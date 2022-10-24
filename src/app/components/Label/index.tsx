@@ -9,3 +9,7 @@ export const TitlePage = styled(Typography)(({ theme }) => ({
   padding: 1,
   color: theme.palette.primary.dark,
 }));
+
+export const CommonLabel = styled(Typography)(() => ({
+  fontSize: 14,
+}));

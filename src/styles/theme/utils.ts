@@ -1,0 +1,1 @@
+export const borderContentStyle = "1px dashed #B36500"

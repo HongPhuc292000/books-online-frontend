@@ -11,6 +11,9 @@
     "readingBooks": ""
   },
   "enums": {
-    "ALL": "All"
+    "ALL": "All",
+    "HOT": "Hot",
+    "NEW": "New",
+    "FULL": "Full"
   }
 }

@@ -11,6 +11,9 @@
     "readingBooks": "Sách đang đọc"
   },
   "enums": {
-    "ALL": "Tất cả"
+    "ALL": "Tất cả",
+    "HOT": "Hot",
+    "NEW": "New",
+    "FULL": "Full"
   }
 }

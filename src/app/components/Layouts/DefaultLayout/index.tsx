@@ -11,7 +11,7 @@ const DefaultLayout = () => {
       {/* <Outlet />
       <Footer />
       <SocialsLink /> */}
-      <Container fixed sx={{ mt: 4 }}>
+      <Container fixed sx={{ mt: 12 }}>
         <Suspense fallback={<LazyLoad />}>
           <Outlet />
         </Suspense>
