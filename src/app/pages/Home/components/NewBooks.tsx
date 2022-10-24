@@ -4,7 +4,7 @@ import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import { FilterWithSelect } from "app/components/SelectOptionBox";
 import { useTranslation } from "react-i18next";
 import React, { memo } from "react";
-import { HomeTable } from "app/components/Table";
+import { HomeItem } from "app/components/ListContent";
 
 const NewBooks = memo(() => {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ const NewBooks = memo(() => {
           <FilterWithSelect />
         </Grid>
       </Grid>
-      <HomeTable />
+      <HomeItem />
     </React.Fragment>
   );
 });
