@@ -1,5 +1,4 @@
-import { Grid } from "@mui/material";
-import { TitlePageWithIcon } from "app/components/Label";
+import TitlePageWithIcon from "app/components/Label/LabelWithIcon";
 import BeenhereIcon from "@mui/icons-material/Beenhere";
 import { useTranslation } from "react-i18next";
 import { memo } from "react";

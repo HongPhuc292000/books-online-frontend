@@ -1,1 +1,0 @@
-export { HomeItem } from "./HomeItem";

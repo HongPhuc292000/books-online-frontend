@@ -1,8 +1,10 @@
-import { memo } from "react";
-
 import { Grid, Box, styled } from "@mui/material";
 import { borderContentStyle } from "styles/theme/utils";
-import { StatusLabel } from "../Label/StatusLabel";
+
+export const ListContentWrap = styled(Box)(() => ({
+  "& > div:first-child": { borderTop: borderContentStyle },
+  borderLeft: borderContentStyle,
+}));
 
 export const ItemInfo = styled(Grid)(({ theme }) => ({
   lineHeight: theme.spacing(5),
@@ -12,22 +14,3 @@ export const ItemInfo = styled(Grid)(({ theme }) => ({
   borderBottom: borderContentStyle,
   borderRight: borderContentStyle,
 }));
-
-export const HomeItem = memo(() => {
-  return (
-    <Grid container>
-      <ItemInfo item xs={6}>
-        <StatusLabel status="HOT" />
-      </ItemInfo>
-      <ItemInfo item xs={2}>
-        aa
-      </ItemInfo>
-      <ItemInfo item xs={2}>
-        aa
-      </ItemInfo>
-      <ItemInfo item xs={2}>
-        aa
-      </ItemInfo>
-    </Grid>
-  );
-});

@@ -34,7 +34,7 @@ const SuccessTypes: string[] = [StatusEnum.FULL];
 
 const ErrorTypes: string[] = [StatusEnum.HOT];
 
-export const StatusLabel = ({ status }: StatusLabelProps) => {
+const StatusLabel = ({ status }: StatusLabelProps) => {
   const { t } = useTranslation();
   if (!status || isEmpty(status)) return <></>;
   const isMatchedStatus = (listStatus: string[]) =>
@@ -48,3 +48,5 @@ export const StatusLabel = ({ status }: StatusLabelProps) => {
       return <InfoLabel>{t(`enums.${status}`)}</InfoLabel>;
   }
 };
+
+export default StatusLabel;

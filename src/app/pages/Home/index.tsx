@@ -13,10 +13,10 @@ const Home = () => {
         <HotBooks />
       </Grid>
       <Grid item xs={12} container spacing={2}>
-        <Grid item xs={9}>
+        <Grid item xs={12} lg={9}>
           <NewBooks />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} lg={3}>
           <ReadingBooks />
           <BookCategories />
         </Grid>
