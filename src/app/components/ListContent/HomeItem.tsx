@@ -2,7 +2,7 @@ import { Grid, Box, styled } from "@mui/material";
 import { borderContentStyle } from "styles/theme/utils";
 
 export const ListContentWrap = styled(Box)(() => ({
-  "& > div:first-child": { borderTop: borderContentStyle },
+  "& > div:first-of-type": { borderTop: borderContentStyle },
   borderLeft: borderContentStyle,
 }));
 

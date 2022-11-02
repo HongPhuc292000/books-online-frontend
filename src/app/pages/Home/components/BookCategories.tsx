@@ -8,10 +8,7 @@ const BookCategories = memo(() => {
   const { t } = useTranslation();
   const theme = useTheme();
   return (
-    <Grid
-      spacing={1.5}
-      sx={{ [theme.breakpoints.down("lg")]: { display: "none" } }}
-    >
+    <Grid sx={{ [theme.breakpoints.down("lg")]: { display: "none" } }}>
       <TitlePageWithIcon
         title={t("common.bookCategories")}
         icon={<ClassIcon color="inherit" />}

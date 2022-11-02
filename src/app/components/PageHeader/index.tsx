@@ -10,29 +10,32 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useTranslation } from "react-i18next";
-import { styled, alpha } from "@mui/material";
+import { styled, alpha, Grid } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { pages, settings } from "./navConfig";
-import MainNavLink from "./components/MainNavLink";
+import { useCallback, useState } from "react";
 import { HeaderNavChangePageI } from "types";
 import path from "app/routes/path";
+
+import { pages, settings } from "./navConfig";
+import MainNavLink from "./components/MainNavLink";
 import MobileNav from "./components/MobileNav";
+import { SignButton } from "../Button";
+import ActionDialog from "../ActionDialog";
+import AuthModal from "./components/AuthModal";
+import Logo from "../Logo";
 
 const Search = styled("div")(({ theme }) => ({
-  "position": "relative",
-  "marginRight": theme.spacing(1),
-  "borderRadius": theme.shape.borderRadius,
-  "backgroundColor": alpha(theme.palette.common.white, 0.15),
+  position: "relative",
+  marginRight: theme.spacing(2),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  "marginLeft": theme.spacing(1),
-  "width": "auto",
+  width: "auto",
   [theme.breakpoints.down("md")]: {
     display: "none",
   },
@@ -49,12 +52,12 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  "color": "inherit",
+  color: "inherit",
   "& .MuiInputBase-input": {
-    "padding": theme.spacing(1, 1, 1, 0),
-    "paddingLeft": `calc(1em + ${theme.spacing(4)})`,
-    "transition": theme.transitions.create("width"),
-    "width": "14ch",
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "14ch",
     "&:focus": {
       width: "24ch",
     },
@@ -63,7 +66,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const PageHeader = () => {
   const { t } = useTranslation();
-  const [openMobileNav, setOpenMobileNav] = React.useState<boolean>(false);
+  const [openMobileNav, setOpenMobileNav] = useState<boolean>(false);
+  const [showSignModal, setShowSignModal] = useState({
+    show: false,
+    login: true,
+  });
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
@@ -79,35 +86,35 @@ const PageHeader = () => {
     setAnchorElUser(null);
   };
 
+  const handleOpenSignModal = (login?: boolean) => {
+    setShowSignModal({
+      show: true,
+      login: !!login,
+    });
+  };
+
+  const handleCloseSignModal = useCallback(() => {
+    setShowSignModal((prevStatus) => ({
+      ...prevStatus,
+      show: false,
+    }));
+  }, []);
+
   return (
     <AppBar position="fixed">
-      <Container maxWidth="xl">
+      <Container>
         <Toolbar
           disableGutters
           sx={{ justifyContent: { xs: "space-between", md: "initial" } }}
         >
           {/* Logo in desktop */}
-          <Box
-            sx={{ display: { xs: "none", md: "flex" }, cursor: "pointer" }}
+          <Logo
             onClick={() => navigate(path.home)}
-          >
-            <MenuBookIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              {t("common.logoText")}
-            </Typography>
-          </Box>
+            displayXs="none"
+            displayMd="flex"
+            variant="h6"
+            mr={2}
+          />
           {/* Main nav in mobile */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -123,28 +130,12 @@ const PageHeader = () => {
             />
           </Box>
           {/* Logo in mobile */}
-          <Box
-            sx={{ display: { xs: "flex", md: "none" }, cursor: "pointer" }}
+          <Logo
             onClick={() => navigate(path.home)}
-          >
-            <MenuBookIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              sx={{
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              {t("common.logoText")}
-            </Typography>
-          </Box>
-
+            displayXs="flex"
+            displayMd="none"
+            variant="h5"
+          />
           {/* Main nav in Desktop */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page: HeaderNavChangePageI) => (
@@ -163,11 +154,30 @@ const PageHeader = () => {
           </Search>
           {/* Profile */}
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
+            <Grid>
+              {/* <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip> */}
+
+              <SignButton
+                sx={{ mr: 1 }}
+                onClick={() => handleOpenSignModal(true)}
+              >
+                {t("common.login")}
+              </SignButton>
+              <SignButton onClick={() => handleOpenSignModal()}>
+                {t("common.register")}
+              </SignButton>
+              <ActionDialog
+                open={showSignModal.show}
+                title={``}
+                maxWidth="sm"
+                onClose={handleCloseSignModal}
+                showContent={() => <AuthModal onClose={handleCloseSignModal} />}
+              />
+            </Grid>
             <Menu
               sx={{ mt: { xs: 1, sm: 1.5, md: 2 } }}
               id="menu-appbar"

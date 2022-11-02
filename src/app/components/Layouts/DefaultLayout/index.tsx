@@ -8,9 +8,6 @@ const DefaultLayout = () => {
   return (
     <>
       <PageHeader />
-      {/* <Outlet />
-      <Footer />
-      <SocialsLink /> */}
       <Container fixed sx={{ mt: 12 }}>
         <Suspense fallback={<LazyLoad />}>
           <Outlet />

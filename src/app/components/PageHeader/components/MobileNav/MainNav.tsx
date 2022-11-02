@@ -59,7 +59,7 @@ const SubNavWrap = memo(({ navItems, isOpenSubNav }: SubNavProps) => {
         {navItems ? (
           <>
             {navItems.map((nav) => {
-              return <SubNav page={nav} />;
+              return <SubNav page={nav} key={nav.title} />;
             })}
           </>
         ) : null}

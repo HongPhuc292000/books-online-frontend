@@ -28,7 +28,7 @@ const NewBooks = memo(() => {
         {["hmmmmmmmmmmmmmmmmmmmmmmmmmmmmm adash adasd", "haiz", "nani"].map(
           (item) => {
             return (
-              <Grid container>
+              <Grid container key={item}>
                 <ItemInfo item xs={8} md={6} container>
                   <Grid item xs={10} md={10} container alignItems="center">
                     <DefaultEllipsisText title={item} />

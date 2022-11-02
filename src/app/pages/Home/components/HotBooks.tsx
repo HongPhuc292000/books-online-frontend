@@ -6,7 +6,7 @@ import { FilterWithSelect } from "app/components/SelectOptionBox";
 import { useTranslation } from "react-i18next";
 import { SimpleCardImage } from "app/components/CardImage";
 
-const testArr = ["aa", "bb", "cc", "dd", "ee", "gg", "ff", "ii", "ee"];
+const testArr = ["aa", "bb", "cc", "dd", "ee", "gg", "ff", "ii", "jj"];
 
 const HotBooks = memo(() => {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ const HotBooks = memo(() => {
       <Grid container spacing={1.5}>
         {testArr.map((item) => {
           return (
-            <Grid item xs={6} sm={3} md={2} lg={1.5}>
+            <Grid key={item} item xs={6} sm={3} md={2} lg={1.5}>
               <SimpleCardImage />
             </Grid>
           );

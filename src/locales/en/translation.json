@@ -8,7 +8,18 @@
     "hotBooks": "",
     "newBooks": "",
     "doneBooks": "",
-    "readingBooks": ""
+    "readingBooks": "",
+    "login": "",
+    "logout": "",
+    "register": "",
+    "cancel": "",
+    "username": "",
+    "password": "",
+    "repeatPassword": "",
+    "email": "",
+    "usernameRequired": "",
+    "passwordRequired": "",
+    "emailRequired": ""
   },
   "enums": {
     "ALL": "All",

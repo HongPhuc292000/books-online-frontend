@@ -20,7 +20,7 @@ const ReadingBooks = memo(() => {
       <ListContentWrap>
         {["hmm", "haiz", "naniiiiiiiiiiiiiiiiiiiiiidấdada"].map((item) => {
           return (
-            <Grid container>
+            <Grid container key={item}>
               <ItemInfo item xs={7} container alignItems="center">
                 <DefaultEllipsisText title={item} />
               </ItemInfo>

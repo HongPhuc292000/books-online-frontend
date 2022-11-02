@@ -8,7 +8,18 @@
     "hotBooks": "Sách đang hot",
     "newBooks": "Sách mới cập nhật",
     "doneBooks": "Sách đã hoàn thành",
-    "readingBooks": "Sách đang đọc"
+    "readingBooks": "Sách đang đọc",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "register": "Đăng ký",
+    "cancel": "Hủy",
+    "username": "Tên đăng nhập",
+    "password": "Mật khẩu",
+    "repeatPassword": "Nhập lại mật khẩu",
+    "email": "Email",
+    "usernameRequired": "Tên đăng nhập không được để trống",
+    "passwordRequired": "Mật khẩu không được để trống",
+    "emailRequired": "Email không được để trống"
   },
   "enums": {
     "ALL": "Tất cả",
