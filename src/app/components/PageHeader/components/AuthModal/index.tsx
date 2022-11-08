@@ -27,11 +27,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -45,12 +41,13 @@ function tabLabelProps(index: number) {
 
 interface AuthModalProps {
   onClose: Function;
+  loginSelected: boolean;
 }
 
-const AuthModal = memo(({ onClose }: AuthModalProps) => {
+const AuthModal = memo(({ onClose, loginSelected }: AuthModalProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(loginSelected ? 0 : 1);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

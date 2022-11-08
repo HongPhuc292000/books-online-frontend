@@ -175,7 +175,12 @@ const PageHeader = () => {
                 title={``}
                 maxWidth="sm"
                 onClose={handleCloseSignModal}
-                showContent={() => <AuthModal onClose={handleCloseSignModal} />}
+                showContent={() => (
+                  <AuthModal
+                    onClose={handleCloseSignModal}
+                    loginSelected={showSignModal.login}
+                  />
+                )}
               />
             </Grid>
             <Menu

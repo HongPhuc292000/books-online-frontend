@@ -1,6 +1,7 @@
 import { Button, Grid, TextField } from "@mui/material";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
+import authService from "services/auth";
 
 interface LoginFormProps {
   onCloseModal: Function;
@@ -8,6 +9,15 @@ interface LoginFormProps {
 
 const LoginForm = memo(({ onCloseModal }: LoginFormProps) => {
   const { t } = useTranslation();
+
+  const handleLogin = async () => {
+    const response = await authService.login({
+      username: "Helen",
+      password: "Helen020920",
+    });
+
+    console.log(response);
+  };
 
   const handleCancelLogin = () => {
     onCloseModal();
@@ -29,7 +39,12 @@ const LoginForm = memo(({ onCloseModal }: LoginFormProps) => {
         margin="normal"
       />
       <Grid container justifyContent="center" mt={2}>
-        <Button variant="contained" color="success" sx={{ mr: 2 }}>
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ mr: 2 }}
+          onClick={handleLogin}
+        >
           {t("common.login")}
         </Button>
         <Button variant="contained" color="error" onClick={handleCancelLogin}>

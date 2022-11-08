@@ -1,7 +1,6 @@
 import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -40,9 +39,7 @@ export default function ActionDialog({
       {title ? (
         <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
       ) : null}
-      <DialogContent>
-        <DialogContentText>{showContent && showContent()}</DialogContentText>
-      </DialogContent>
+      <DialogContent>{showContent && showContent()}</DialogContent>
     </Dialog>
   );
 }
