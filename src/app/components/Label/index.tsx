@@ -10,3 +10,9 @@ export const TitlePage = styled(Typography)(({ theme }) => ({
 export const CommonLabel = styled(Typography)(() => ({
   fontSize: 12,
 }));
+
+export const ErrorLabel = styled(Typography)(({ theme }) => ({
+  color: theme.palette.error.main,
+  fontSize: 12,
+  margin: "3px 14px 0",
+}));

@@ -15,9 +15,10 @@ import { styled, alpha, Grid } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { HeaderNavChangePageI } from "types";
 import path from "app/routes/path";
+import { Cookies } from "types/enums";
 
 import { pages, settings } from "./navConfig";
 import MainNavLink from "./components/MainNavLink";
@@ -26,6 +27,12 @@ import { SignButton } from "../Button";
 import ActionDialog from "../ActionDialog";
 import AuthModal from "./components/AuthModal";
 import Logo from "../Logo";
+import { decodeTokenGetId, deleteCookie, getCookies } from "utils/cookies";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { selectAuth } from "./slice/selector";
+import { authActions } from "./slice";
+import { withLoading } from "../HOC/withLoadingPage";
+import { useLoading } from "app/hooks/useLoading";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,7 +71,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const PageHeader = () => {
+interface PageHeaderProps {
+  setLoading: Function;
+}
+
+const PageHeader = ({ setLoading }: PageHeaderProps) => {
   const { t } = useTranslation();
   const [openMobileNav, setOpenMobileNav] = useState<boolean>(false);
   const [showSignModal, setShowSignModal] = useState({
@@ -72,7 +83,10 @@ const PageHeader = () => {
     login: true,
   });
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const { authToken } = useAppSelector(selectAuth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading({ setLoading });
 
   const handleOpenMobileNav = () => {
     setOpenMobileNav(true);
@@ -84,6 +98,11 @@ const PageHeader = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+    dispatch(authActions.logout(() => {}));
+    setShowSignModal((prevStatus) => ({
+      ...prevStatus,
+      show: false,
+    }));
   };
 
   const handleOpenSignModal = (login?: boolean) => {
@@ -98,6 +117,24 @@ const PageHeader = () => {
       ...prevStatus,
       show: false,
     }));
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!!getCookies(Cookies.AUTHTOKEN)) {
+      showLoading();
+      dispatch(
+        authActions.getUserInfo(
+          decodeTokenGetId(getCookies(Cookies.AUTHTOKEN)) || "",
+          () => {
+            hideLoading();
+          }
+        )
+      );
+    } else {
+      deleteCookie(Cookies.AUTHTOKEN);
+      deleteCookie(Cookies.REFRESHTOKEN);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -155,34 +192,42 @@ const PageHeader = () => {
           {/* Profile */}
           <Box sx={{ flexGrow: 0 }}>
             <Grid>
-              {/* <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip> */}
-
-              <SignButton
-                sx={{ mr: 1 }}
-                onClick={() => handleOpenSignModal(true)}
-              >
-                {t("common.login")}
-              </SignButton>
-              <SignButton onClick={() => handleOpenSignModal()}>
-                {t("common.register")}
-              </SignButton>
-              <ActionDialog
-                open={showSignModal.show}
-                title={``}
-                maxWidth="sm"
-                onClose={handleCloseSignModal}
-                showContent={() => (
-                  <AuthModal
+              {!!authToken ? (
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <>
+                  <SignButton
+                    sx={{ mr: 1 }}
+                    onClick={() => handleOpenSignModal(true)}
+                  >
+                    {t("common.login")}
+                  </SignButton>
+                  <SignButton onClick={() => handleOpenSignModal()}>
+                    {t("common.register")}
+                  </SignButton>
+                  <ActionDialog
+                    open={showSignModal.show}
+                    title={``}
+                    maxWidth="sm"
                     onClose={handleCloseSignModal}
-                    loginSelected={showSignModal.login}
+                    showContent={() => (
+                      <AuthModal
+                        onClose={handleCloseSignModal}
+                        loginSelected={showSignModal.login}
+                      />
+                    )}
                   />
-                )}
-              />
+                </>
+              )}
             </Grid>
+            {/* User menu */}
             <Menu
               sx={{ mt: { xs: 1, sm: 1.5, md: 2 } }}
               id="menu-appbar"
@@ -211,4 +256,4 @@ const PageHeader = () => {
     </AppBar>
   );
 };
-export default PageHeader;
+export default withLoading(PageHeader);

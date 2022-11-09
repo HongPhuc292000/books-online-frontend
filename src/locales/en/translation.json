@@ -19,12 +19,18 @@
     "email": "",
     "usernameRequired": "",
     "passwordRequired": "",
-    "emailRequired": ""
+    "emailRequired": "",
+    "not_signed": ""
   },
   "enums": {
     "ALL": "All",
     "HOT": "Hot",
     "NEW": "New",
     "FULL": "Full"
+  },
+  "auth": {
+    "username_not_correct": "",
+    "password_not_correct": "",
+    "loginSuccess": ""
   }
 }

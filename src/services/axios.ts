@@ -1,10 +1,16 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { Cookies } from "types/enums";
+import { getCookies } from "utils/cookies";
 
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#request- config` for the full list of configs
 const interceptAuth = (config: AxiosRequestConfig) => {
   const instance = axios.create(config);
   instance.interceptors.request.use((cf) => {
+    const authToken = getCookies(Cookies.AUTHTOKEN);
+    if (authToken) {
+      cf.headers!["token"] = `Bearer ${authToken}`;
+    }
     return cf;
   });
   instance.interceptors.response.use(

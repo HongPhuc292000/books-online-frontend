@@ -19,12 +19,18 @@
     "email": "Email",
     "usernameRequired": "Tên đăng nhập không được để trống",
     "passwordRequired": "Mật khẩu không được để trống",
-    "emailRequired": "Email không được để trống"
+    "emailRequired": "Email không được để trống",
+    "not_signed": "Bạn chưa đăng nhập"
   },
   "enums": {
     "ALL": "Tất cả",
     "HOT": "Hot",
     "NEW": "New",
     "FULL": "Full"
+  },
+  "auth": {
+    "username_not_correct": "Tên tài khoản không chính xác",
+    "password_not_correct": "Mật khẩu không chính xác",
+    "loginSuccess": "Chào mừng bạn"
   }
 }

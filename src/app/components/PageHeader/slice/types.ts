@@ -1,6 +1,7 @@
-import { LoginResponse } from "types";
+import { UserDetail } from "types/User";
 
 /* --- STATE --- */
-export interface HomeState {
-  products?: LoginResponse;
+export interface AuthState {
+  authToken?: string;
+  user?: UserDetail;
 }

@@ -1,11 +1,10 @@
 import { DefaultLayout } from "app/components/Layouts";
-import React, { lazy } from "react";
+import React from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import path from "./path";
-
-const Home = lazy(() => import("app/pages/Home"));
-const BookCategories = lazy(() => import("app/pages/BookCategories"));
-const Reviews = lazy(() => import("app/pages/Reviews"));
+import Home from "app/pages/Home";
+import BookCategories from "app/pages/BookCategories";
+import Reviews from "app/pages/Reviews";
 
 export default function Router() {
   return useRoutes([
