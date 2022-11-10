@@ -2,7 +2,12 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeLatest } from "redux-saga/effects";
 import authService from "services/auth";
 import userService from "services/user";
-import { LoginParams, LoginResponse, UserDetail } from "types";
+import {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  UserDetail,
+} from "types";
 import { Cookies } from "types/enums";
 import {
   decodeTokenGetId,
@@ -13,7 +18,7 @@ import {
 import { authActions as actions } from ".";
 
 function* login(
-  action: PayloadAction<LoginParams, string, (error?: any) => void>
+  action: PayloadAction<LoginRequest, string, (error?: any) => void>
 ) {
   try {
     const result: LoginResponse = yield call(authService.login, action.payload);
@@ -25,6 +30,32 @@ function* login(
     );
     yield put(actions.getUserInfoSuccess(userInfo));
     yield put(actions.loginSuccess(result.accessToken));
+    action.meta();
+  } catch (error: any) {
+    action.meta(error.response.data);
+  }
+}
+
+function* register(
+  action: PayloadAction<RegisterRequest, string, (error?: any) => void>
+) {
+  try {
+    const registerResult: LoginRequest = yield call(
+      authService.register,
+      action.payload
+    );
+    const loginResult: LoginResponse = yield call(
+      authService.login,
+      registerResult
+    );
+    setCookie(Cookies.AUTHTOKEN, loginResult.accessToken);
+    setCookie(Cookies.REFRESHTOKEN, loginResult.refreshToken);
+    const userInfo: UserDetail = yield call(
+      userService.getDetailUser,
+      decodeTokenGetId(loginResult.accessToken)
+    );
+    yield put(actions.getUserInfoSuccess(userInfo));
+    yield put(actions.loginSuccess(loginResult.accessToken));
     action.meta();
   } catch (error: any) {
     action.meta(error.response.data);
@@ -61,6 +92,7 @@ function* getUserInfo(
 
 export function* authSaga() {
   yield takeLatest(actions.login.type, login);
+  yield takeLatest(actions.register.type, register);
   yield takeLatest(actions.logout.type, logout);
   yield takeLatest(actions.getUserInfo.type, getUserInfo);
 }

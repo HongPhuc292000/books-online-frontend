@@ -7,6 +7,7 @@ export interface UserDetail {
   role: UserRole;
   fullname: string;
   email: string;
+  avatar?: Buffer;
   createAt: string;
   modifiedAt: string;
 }

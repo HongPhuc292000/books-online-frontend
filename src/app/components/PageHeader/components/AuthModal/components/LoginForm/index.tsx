@@ -1,13 +1,14 @@
 import { Button, Grid, TextField } from "@mui/material";
 import { withLoading } from "app/components/HOC/withLoadingPage";
 import { authActions } from "app/components/PageHeader/slice";
+import PasswordField from "app/components/PasswordField";
 import { useAppDispatch } from "app/hooks";
 import { useLoading } from "app/hooks/useLoading";
 import useToastMessage from "app/hooks/useToastMessage";
 import { useFormik } from "formik";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LoginParams } from "types";
+import { LoginRequest } from "types";
 import { LoginSchema } from "./login.data";
 
 interface LoginFormProps {
@@ -20,8 +21,9 @@ const LoginForm = memo(({ onCloseModal, setLoading }: LoginFormProps) => {
   const dispatch = useAppDispatch();
   const { showLoading, hideLoading } = useLoading({ setLoading });
   const { showSuccessSnackbar, showErrorSnackbar } = useToastMessage();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const handleLogin = (values: LoginParams) => {
+  const handleLogin = (values: LoginRequest) => {
     showLoading();
     dispatch(
       authActions.login(values, (error) => {
@@ -38,6 +40,10 @@ const LoginForm = memo(({ onCloseModal, setLoading }: LoginFormProps) => {
 
   const handleCancelLogin = () => {
     onCloseModal();
+  };
+
+  const handleToggleShowPassword = () => {
+    setShowPassword((prev) => !prev);
   };
 
   const formik = useFormik({
@@ -59,18 +65,16 @@ const LoginForm = memo(({ onCloseModal, setLoading }: LoginFormProps) => {
         required
         label={t("common.username")}
         margin="normal"
-        error={!!(formik.touched.username && formik.errors.username)}
-        helperText={formik.errors.username}
+        error={formik.touched.username && !!formik.errors.username}
+        helperText={
+          formik.touched.username && t(formik.errors.username as string)
+        }
       />
-      <TextField
-        {...formik.getFieldProps("password")}
-        type="password"
-        fullWidth
-        required
-        label={t("common.password")}
-        margin="normal"
-        error={!!(formik.touched.password && formik.errors.password)}
-        helperText={formik.errors.password}
+      <PasswordField
+        formik={formik}
+        showPassword={showPassword}
+        onToggleShowPassword={handleToggleShowPassword}
+        field="password"
       />
       <Grid container justifyContent="center" mt={2}>
         <Button

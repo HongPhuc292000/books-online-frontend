@@ -9,18 +9,24 @@
     "newBooks": "Sách mới cập nhật",
     "doneBooks": "Sách đã hoàn thành",
     "readingBooks": "Sách đang đọc",
+    "profile": "Hồ sơ",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "register": "Đăng ký",
     "cancel": "Hủy",
     "username": "Tên đăng nhập",
     "password": "Mật khẩu",
+    "fullname": "Tên đầy đủ",
     "repeatPassword": "Nhập lại mật khẩu",
     "email": "Email",
     "usernameRequired": "Tên đăng nhập không được để trống",
     "passwordRequired": "Mật khẩu không được để trống",
     "emailRequired": "Email không được để trống",
-    "not_signed": "Bạn chưa đăng nhập"
+    "fullnameRequired": "Tên đầy đủ không được để trống",
+    "repeatPasswordRequired": "Vui lòng nhập lại mật khẩu",
+    "emailNotValid": "Email không hợp lệ",
+    "not_signed": "Bạn chưa đăng nhập",
+    "server_error": "Lỗi máy chủ"
   },
   "enums": {
     "ALL": "Tất cả",
@@ -31,6 +37,7 @@
   "auth": {
     "username_not_correct": "Tên tài khoản không chính xác",
     "password_not_correct": "Mật khẩu không chính xác",
+    "server_error": "Lỗi máy chủ",
     "loginSuccess": "Chào mừng bạn"
   }
 }

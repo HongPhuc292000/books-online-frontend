@@ -1,43 +1,134 @@
 import { Button, Grid, TextField } from "@mui/material";
-import { memo } from "react";
+import { withLoading } from "app/components/HOC/withLoadingPage";
+import { authActions } from "app/components/PageHeader/slice";
+import PasswordField from "app/components/PasswordField";
+import { useAppDispatch } from "app/hooks";
+import { useLoading } from "app/hooks/useLoading";
+import useToastMessage from "app/hooks/useToastMessage";
+import { useFormik } from "formik";
+import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { RegisterRequest } from "types";
+import { registerSchema } from "./register.data";
 
 interface RegisterFormProps {
+  setLoading: Function;
   onCloseModal: Function;
 }
 
-const RegisterForm = memo(({ onCloseModal }: RegisterFormProps) => {
+const RegisterForm = memo(({ onCloseModal, setLoading }: RegisterFormProps) => {
   const { t } = useTranslation();
+  const { showLoading, hideLoading } = useLoading({ setLoading });
+  const dispatch = useAppDispatch();
+  const { showSuccessSnackbar, showErrorSnackbar } = useToastMessage();
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    repeatPassword: false,
+  });
 
   const handleCancelRegister = () => {
     onCloseModal();
   };
 
+  const handleToggleShowPassword = () => {
+    setShowPassword((prev) => ({ ...prev, password: !prev.password }));
+  };
+
+  const handleToggleShowRepeatPassword = () => {
+    setShowPassword((prev) => ({
+      ...prev,
+      repeatPassword: !prev.repeatPassword,
+    }));
+  };
+
+  const handleRegister = (values: RegisterRequest) => {
+    showLoading();
+    dispatch(
+      authActions.register(values, (error) => {
+        if (!error) {
+          showSuccessSnackbar(t("auth.loginSuccess"));
+          hideLoading();
+        } else {
+          showErrorSnackbar(t(`auth.${error}`));
+          hideLoading();
+        }
+      })
+    );
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
+      fullname: "",
+    },
+    validationSchema: registerSchema,
+    onSubmit: (values) => {
+      const { username, password, email, fullname } = values;
+      const formValues = {
+        username,
+        email,
+        password,
+        fullname,
+      };
+      handleRegister(formValues);
+    },
+  });
+
   return (
-    <>
+    <form onSubmit={formik.handleSubmit}>
       <TextField
+        {...formik.getFieldProps("username")}
         fullWidth
         required
         label={t("common.username")}
         margin="normal"
-      />
-      <TextField fullWidth required label={t("common.email")} margin="normal" />
-      <TextField
-        type="password"
-        fullWidth
-        required
-        label={t("common.password")}
-        margin="normal"
+        error={formik.touched.username && !!formik.errors.username}
+        helperText={
+          formik.touched.username && t(formik.errors.username as string)
+        }
       />
       <TextField
-        type="password"
+        {...formik.getFieldProps("fullname")}
         fullWidth
         required
-        label={t("common.repeatPassword")}
+        label={t("common.fullname")}
         margin="normal"
+        error={formik.touched.fullname && !!formik.errors.fullname}
+        helperText={
+          formik.touched.fullname && t(formik.errors.fullname as string)
+        }
+      />
+      <TextField
+        {...formik.getFieldProps("email")}
+        fullWidth
+        required
+        label={t("common.email")}
+        margin="normal"
+        error={formik.touched.email && !!formik.errors.email}
+        helperText={formik.touched.email && t(formik.errors.email as string)}
+      />
+      <PasswordField
+        formik={formik}
+        showPassword={showPassword.password}
+        onToggleShowPassword={handleToggleShowPassword}
+        field="password"
+      />
+      <PasswordField
+        formik={formik}
+        showPassword={showPassword.password}
+        onToggleShowPassword={handleToggleShowRepeatPassword}
+        field="repeatPassword"
       />
       <Grid container justifyContent="center" mt={2}>
-        <Button variant="contained" color="success" sx={{ mr: 2 }}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="success"
+          sx={{ mr: 2 }}
+        >
           {t("common.register")}
         </Button>
         <Button
@@ -48,8 +139,8 @@ const RegisterForm = memo(({ onCloseModal }: RegisterFormProps) => {
           {t("common.cancel")}
         </Button>
       </Grid>
-    </>
+    </form>
   );
 });
 
-export default RegisterForm;
+export default withLoading(RegisterForm);

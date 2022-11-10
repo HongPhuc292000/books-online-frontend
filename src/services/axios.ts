@@ -8,8 +8,12 @@ const interceptAuth = (config: AxiosRequestConfig) => {
   const instance = axios.create(config);
   instance.interceptors.request.use((cf) => {
     const authToken = getCookies(Cookies.AUTHTOKEN);
+    const refreshToken = getCookies(Cookies.REFRESHTOKEN);
     if (authToken) {
       cf.headers!["token"] = `Bearer ${authToken}`;
+    }
+    if (refreshToken) {
+      cf.headers!["refreshToken"] = refreshToken;
     }
     return cf;
   });

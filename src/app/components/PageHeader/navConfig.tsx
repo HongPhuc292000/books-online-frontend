@@ -32,4 +32,9 @@ export const pages: HeaderNavChangePageI[] = [
   },
 ];
 
-export const settings = ["Profile", "Account", "Dashboard", "Logout"];
+export const settings = [
+  {
+    title: "profile",
+    link: "",
+  },
+];

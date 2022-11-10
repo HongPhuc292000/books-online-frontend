@@ -9,18 +9,24 @@
     "newBooks": "",
     "doneBooks": "",
     "readingBooks": "",
+    "profile": "",
     "login": "",
     "logout": "",
     "register": "",
     "cancel": "",
     "username": "",
     "password": "",
+    "fullname": "",
     "repeatPassword": "",
     "email": "",
     "usernameRequired": "",
     "passwordRequired": "",
     "emailRequired": "",
-    "not_signed": ""
+    "fullnameRequired": "",
+    "repeatPasswordRequired": "",
+    "emailNotValid": "",
+    "not_signed": "",
+    "server_error": ""
   },
   "enums": {
     "ALL": "All",
@@ -31,6 +37,7 @@
   "auth": {
     "username_not_correct": "",
     "password_not_correct": "",
-    "loginSuccess": ""
+    "loginSuccess": "",
+    "server_error": ""
   }
 }

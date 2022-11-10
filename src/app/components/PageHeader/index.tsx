@@ -15,10 +15,12 @@ import { styled, alpha, Grid } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HeaderNavChangePageI } from "types";
 import path from "app/routes/path";
 import { Cookies } from "types/enums";
+import { useLoading } from "app/hooks/useLoading";
+import noAvatar from "assets/img/no-avatar.jpg";
 
 import { pages, settings } from "./navConfig";
 import MainNavLink from "./components/MainNavLink";
@@ -32,7 +34,6 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import { selectAuth } from "./slice/selector";
 import { authActions } from "./slice";
 import { withLoading } from "../HOC/withLoadingPage";
-import { useLoading } from "app/hooks/useLoading";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -83,7 +84,7 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
     login: true,
   });
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { authToken } = useAppSelector(selectAuth);
+  const { authToken, user } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading({ setLoading });
@@ -98,11 +99,25 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-    dispatch(authActions.logout(() => {}));
     setShowSignModal((prevStatus) => ({
       ...prevStatus,
       show: false,
     }));
+  };
+
+  const handleLogout = () => {
+    handleCloseUserMenu();
+    showLoading();
+    dispatch(
+      authActions.logout(() => {
+        hideLoading();
+      })
+    );
+  };
+
+  const handleSelectUserMenu = (link: string) => {
+    handleCloseUserMenu();
+    navigate(link);
   };
 
   const handleOpenSignModal = (login?: boolean) => {
@@ -119,7 +134,7 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
     }));
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!!getCookies(Cookies.AUTHTOKEN)) {
       showLoading();
       dispatch(
@@ -196,8 +211,8 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
+                      alt={user?.fullname}
+                      src={user?.avatar ? "" : noAvatar}
                     />
                   </IconButton>
                 </Tooltip>
@@ -245,10 +260,18 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting.title}
+                  onClick={() => handleSelectUserMenu(setting.link)}
+                >
+                  <Typography textAlign="center">
+                    {t(`common.${setting.title}`)}
+                  </Typography>
                 </MenuItem>
               ))}
+              <MenuItem onClick={handleLogout}>
+                <Typography textAlign="center">{t("common.logout")}</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
