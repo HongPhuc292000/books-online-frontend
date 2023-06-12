@@ -1,8 +1,11 @@
 const path = {
-  root: "/",
-  home: "home",
-  bookCategories: "bookCategories/",
-  bookCategory: ":category",
-  reviews: "reviews",
+  inherit: "",
+  product: "product/",
+  detail: ":id",
+  list: "list",
+  order: "order/",
+  checkoutSuccess: "checkoutSuccess",
+  cart: "cart",
+  bought: "bought",
 };
 export default path;

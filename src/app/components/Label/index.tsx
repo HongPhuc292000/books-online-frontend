@@ -16,3 +16,16 @@ export const ErrorLabel = styled(Typography)(({ theme }) => ({
   fontSize: 12,
   margin: "3px 14px 0",
 }));
+
+export const LinkLabel = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  textDecoration: "underline",
+  cursor: "pointer",
+}));
+
+export const NavigateBackLabel = styled(Typography)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  color: theme.palette.primary.main,
+  cursor: "pointer",
+}));

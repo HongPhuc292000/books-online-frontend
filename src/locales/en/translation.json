@@ -6,6 +6,7 @@
     "reviews": "Review",
     "searchPlaceholder": "Search books",
     "hotBooks": "",
+    "bestSellingBooks": "",
     "newBooks": "",
     "doneBooks": "",
     "readingBooks": "",
@@ -17,8 +18,11 @@
     "username": "",
     "password": "",
     "fullname": "",
+    "inStock": "",
+    "contact": "",
     "repeatPassword": "",
     "email": "",
+    "showmore": "",
     "usernameRequired": "",
     "passwordRequired": "",
     "emailRequired": "",
@@ -26,7 +30,8 @@
     "repeatPasswordRequired": "",
     "emailNotValid": "",
     "not_signed": "",
-    "server_error": ""
+    "server_error": "",
+    "unexpected_error": ""
   },
   "enums": {
     "ALL": "All",

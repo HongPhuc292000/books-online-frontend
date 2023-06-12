@@ -1,38 +1,58 @@
 import { DefaultLayout } from "app/components/Layouts";
 import React from "react";
-import { Navigate, useRoutes } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import path from "./path";
 import Home from "app/pages/Home";
-import BookCategories from "app/pages/BookCategories";
-import Reviews from "app/pages/Reviews";
+import DetailBook from "app/pages/DetailBook";
+import CartPage from "app/pages/Cart";
+import ListProducts from "app/pages/ListProducts";
+import CheckoutSuccess from "app/pages/CheckoutSuccess";
 
 export default function Router() {
   return useRoutes([
     {
-      path: path.root,
+      path: path.inherit,
       element: <DefaultLayout />,
       children: [
         {
           index: true,
-          element: <Navigate to={path.home} replace />,
-        },
-        {
-          path: path.home,
+          path: path.inherit,
           element: <Home />,
         },
         {
-          path: path.bookCategories,
-          element: <BookCategories />,
+          path: path.product,
           children: [
             {
-              path: path.bookCategory,
-              element: <BookCategories />,
+              path: path.list,
+              element: <ListProducts />,
+            },
+            {
+              path: path.detail,
+              element: <DetailBook />,
             },
           ],
         },
         {
-          path: path.reviews,
-          element: <Reviews />,
+          path: path.cart,
+          children: [
+            {
+              path: path.inherit,
+              element: <CartPage />,
+            },
+          ],
+        },
+        {
+          path: path.order,
+          children: [
+            // {
+            //   path: path.inherit,
+            //   element: <CartPage />,
+            // },
+            {
+              path: path.checkoutSuccess,
+              element: <CheckoutSuccess />,
+            },
+          ],
         },
       ],
     },

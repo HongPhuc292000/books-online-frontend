@@ -11,12 +11,30 @@ export default function GlobalStyles() {
           boxSizing: "border-box",
           scrollBehavior: "smooth",
         },
-        html: {
+        "html": {
           fontFamily: "Roboto, Arial, sans-serif",
         },
-        body: {
+        "body": {
           backgroundImage: `linear-gradient(${theme.palette.grey[200]},${theme.palette.grey[50]})`,
           backgroundRepeat: "no-repeat",
+        },
+        ".slick-dots": {
+          "bottom": 0,
+          "li button:before": {
+            fontSize: "8px",
+          },
+        },
+        ".slick-arrow": {
+          "&:before": {
+            fontSize: "28px",
+          },
+          "zIndex": 1,
+        },
+        ".slick-prev": {
+          left: "10px",
+        },
+        ".slick-next": {
+          right: "10px",
         },
       }}
     />

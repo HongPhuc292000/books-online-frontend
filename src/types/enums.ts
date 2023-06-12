@@ -17,3 +17,33 @@ export enum UserRole {
   "ADMIN" = "ADMIN",
   "CUSTOMER" = "CUSTOMER",
 }
+
+export enum EnableEnum {
+  ENABLE = "ENABLE",
+  DISABLE = "DISABLE",
+}
+
+export enum PaymentTypeEnum {
+  CASH = "CASH",
+  ONLINE = "ONLINE",
+}
+
+export enum OrderStatusesEnum {
+  INCART = "INCART",
+  ORDERED = "ORDERED",
+  DELIVERING = "DELIVERING",
+  DONE = "DONE",
+  CANCEL = "CANCEL",
+  REPAY = "REPAY",
+}
+
+export enum UpdateAmountEnum {
+  INCREASE = "INCREASE",
+  REDUCE = "REDUCE",
+  INSERT = "FULL",
+}
+
+export enum DiscountTypeEnum {
+  PERCENT = "PERCENT",
+  CASH = "CASH",
+}

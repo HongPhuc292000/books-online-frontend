@@ -1,5 +1,10 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import authReducer from "app/components/PageHeader/slice/index";
+import homeReducer from "app/pages/Home/slice";
+import detailBookReducer from "app/pages/DetailBook/slice";
+import cartReducer from "app/pages/Cart/slice";
+import listBooksReducer from "app/pages/ListProducts/slice";
+import checkoutSuccessReducer from "app/pages/CheckoutSuccess/slice";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./rootSaga";
 
@@ -7,6 +12,11 @@ const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: {
     authState: authReducer,
+    homeState: homeReducer,
+    detailBookState: detailBookReducer,
+    cartState: cartReducer,
+    listBooksState: listBooksReducer,
+    checkoutSuccessStateState: checkoutSuccessReducer,
   },
   middleware: [sagaMiddleware],
 });

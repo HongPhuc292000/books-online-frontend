@@ -1,74 +1,63 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import { useTranslation } from "react-i18next";
-import { styled, alpha, Grid } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import WifiCalling3Icon from "@mui/icons-material/WifiCalling3";
+import { Badge, Grid, alpha, styled, useTheme } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
-import { useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
-import { HeaderNavChangePageI } from "types";
-import path from "app/routes/path";
-import { Cookies } from "types/enums";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { useLoading } from "app/hooks/useLoading";
+import path from "app/routes/path";
 import noAvatar from "assets/img/no-avatar.jpg";
+import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Cookies } from "types/enums";
 
-import { pages, settings } from "./navConfig";
-import MainNavLink from "./components/MainNavLink";
-import MobileNav from "./components/MobileNav";
-import { SignButton } from "../Button";
-import ActionDialog from "../ActionDialog";
-import AuthModal from "./components/AuthModal";
-import Logo from "../Logo";
-import { decodeTokenGetId, deleteCookie, getCookies } from "utils/cookies";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { selectAuth } from "./slice/selector";
-import { authActions } from "./slice";
+import useToastMessage from "app/hooks/useToastMessage";
+import { cartActions } from "app/pages/Cart/slice";
+import { selectOrder } from "app/pages/Cart/slice/selector";
+import { decodeTokenGetId, deleteCookie, getCookies } from "utils/cookies";
+import ActionDialog from "../ActionDialog";
+import { SignButton } from "../Button";
 import { withLoading } from "../HOC/withLoadingPage";
+import Logo from "../Logo";
+import AuthModal from "./components/AuthModal";
+import { settings } from "./navConfig";
+import { authActions } from "./slice";
+import { selectAuth } from "./slice/selector";
+import { listBooksActions } from "app/pages/ListProducts/slice";
+import { selectListBooks } from "app/pages/ListProducts/slice/selector";
 
 const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  marginRight: theme.spacing(2),
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "position": "relative",
+  "marginRight": theme.spacing(2),
+  "borderRadius": theme.shape.borderRadius,
+  "backgroundColor": alpha(theme.palette.common.white, 0.15),
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  width: "auto",
+  "width": "auto",
   [theme.breakpoints.down("md")]: {
     display: "none",
   },
 }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
+  "color": "inherit",
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    padding: theme.spacing(1),
     transition: theme.transitions.create("width"),
-    width: "14ch",
-    "&:focus": {
-      width: "24ch",
-    },
+    width: "32ch",
   },
 }));
 
@@ -78,20 +67,19 @@ interface PageHeaderProps {
 
 const PageHeader = ({ setLoading }: PageHeaderProps) => {
   const { t } = useTranslation();
-  const [openMobileNav, setOpenMobileNav] = useState<boolean>(false);
-  const [showSignModal, setShowSignModal] = useState({
-    show: false,
-    login: true,
-  });
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { authToken, user } = useAppSelector(selectAuth);
+  const theme = useTheme();
+  const location = useLocation();
+
+  const { authToken, user, signModalStatus } = useAppSelector(selectAuth);
+  const { totalProductInCart } = useAppSelector(selectOrder);
+  const { filterListBooks } = useAppSelector(selectListBooks);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading({ setLoading });
+  const { showErrorSnackbar } = useToastMessage();
 
-  const handleOpenMobileNav = () => {
-    setOpenMobileNav(true);
-  };
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [searchKey, setSearchKey] = useState<string>("");
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -99,10 +87,7 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-    setShowSignModal((prevStatus) => ({
-      ...prevStatus,
-      show: false,
-    }));
+    dispatch(authActions.setShowSignModal({ ...signModalStatus, show: false }));
   };
 
   const handleLogout = () => {
@@ -121,18 +106,52 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
   };
 
   const handleOpenSignModal = (login?: boolean) => {
-    setShowSignModal({
-      show: true,
-      login: !!login,
-    });
+    dispatch(
+      authActions.setShowSignModal({
+        show: true,
+        login: !!login,
+      })
+    );
   };
 
   const handleCloseSignModal = useCallback(() => {
-    setShowSignModal((prevStatus) => ({
-      ...prevStatus,
-      show: false,
-    }));
-  }, []);
+    dispatch(
+      authActions.setShowSignModal({
+        ...signModalStatus,
+        show: false,
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signModalStatus]);
+
+  const handleFetchDetailCart = () => {
+    if (user) {
+      showLoading();
+      dispatch(
+        cartActions.getCartDetail(user._id, (error) => {
+          if (error) {
+            hideLoading();
+            showErrorSnackbar(t(`error.${error}`));
+          } else {
+            hideLoading();
+          }
+        })
+      );
+    }
+  };
+
+  const handleSearchBooks = () => {
+    if (location.pathname === "/product/list") {
+      dispatch(
+        listBooksActions.setFilterListBooks({
+          ...filterListBooks,
+          searchKey: searchKey,
+        })
+      );
+    } else {
+      navigate(`/product/list?searchKey=${searchKey}`);
+    }
+  };
 
   useEffect(() => {
     if (!!getCookies(Cookies.AUTHTOKEN)) {
@@ -152,58 +171,68 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    handleFetchDetailCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   return (
     <AppBar position="fixed">
       <Container>
         <Toolbar
           disableGutters
-          sx={{ justifyContent: { xs: "space-between", md: "initial" } }}
+          sx={{ justifyContent: { xs: "space-between" } }}
         >
           {/* Logo in desktop */}
           <Logo
-            onClick={() => navigate(path.home)}
+            onClick={() => navigate(path.inherit)}
             displayXs="none"
             displayMd="flex"
             variant="h6"
             mr={2}
           />
-          {/* Main nav in mobile */}
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              onClick={handleOpenMobileNav}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <MobileNav
-              openMobileNav={openMobileNav}
-              setOpenMobileNav={setOpenMobileNav}
-            />
-          </Box>
           {/* Logo in mobile */}
           <Logo
-            onClick={() => navigate(path.home)}
+            onClick={() => navigate(path.inherit)}
             displayXs="flex"
             displayMd="none"
             variant="h5"
           />
-          {/* Main nav in Desktop */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page: HeaderNavChangePageI) => (
-              <MainNavLink key={page.title} page={page} />
-            ))}
-          </Box>
           {/* Searchbar in desktop */}
           <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
             <StyledInputBase
               placeholder={t("common.searchPlaceholder")}
               inputProps={{ "aria-label": "search" }}
+              onChange={(e) => setSearchKey(e.target.value)}
+              value={searchKey}
             />
+            <IconButton
+              type="button"
+              aria-label="search"
+              sx={{ cursor: "pointer", color: theme.palette.common.white }}
+              onClick={handleSearchBooks}
+            >
+              <SearchIcon />
+            </IconButton>
           </Search>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <WifiCalling3Icon />
+            <Box sx={{ ml: 1 }}>
+              <Typography variant="subtitle1">0988 888 888</Typography>
+              <Typography variant="body2">Hot line</Typography>
+            </Box>
+          </Box>
+          {!!authToken ? (
+            <IconButton
+              onClick={() => {
+                navigate("/cart");
+              }}
+            >
+              <Badge badgeContent={totalProductInCart} color="secondary">
+                <ShoppingCartIcon color="action" />
+              </Badge>
+            </IconButton>
+          ) : null}
           {/* Profile */}
           <Box sx={{ flexGrow: 0 }}>
             <Grid>
@@ -212,7 +241,7 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt={user?.fullname}
-                      src={user?.avatar ? "" : noAvatar}
+                      src={user?.imageUrl ? user.imageUrl : noAvatar}
                     />
                   </IconButton>
                 </Tooltip>
@@ -228,14 +257,14 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
                     {t("common.register")}
                   </SignButton>
                   <ActionDialog
-                    open={showSignModal.show}
+                    open={signModalStatus.show}
                     title={``}
                     maxWidth="sm"
                     onClose={handleCloseSignModal}
                     showContent={() => (
                       <AuthModal
                         onClose={handleCloseSignModal}
-                        loginSelected={showSignModal.login}
+                        loginSelected={signModalStatus.login}
                       />
                     )}
                   />
@@ -276,6 +305,15 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
           </Box>
         </Toolbar>
       </Container>
+      {/* Do latter */}
+      <Box style={{ backgroundColor: theme.palette.common.white }}>
+        <Container>
+          <Grid container>
+            <Grid item></Grid>
+            <Grid item></Grid>
+          </Grid>
+        </Container>
+      </Box>
     </AppBar>
   );
 };

@@ -1,9 +1,14 @@
 import { AuthState } from "./types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginRequest, RegisterRequest } from "types";
+import { LoginRequest, RegisterRequest, SignModalStatus } from "types";
 import { UserDetail } from "types/User";
 
-export const initialState: AuthState = {};
+export const initialState: AuthState = {
+  signModalStatus: {
+    show: false,
+    login: true,
+  },
+};
 
 export const authSlice = createSlice({
   name: "auth",
@@ -38,6 +43,9 @@ export const authSlice = createSlice({
     },
     getUserInfoSuccess(state, action: PayloadAction<UserDetail>) {
       state.user = action.payload;
+    },
+    setShowSignModal(state, action: PayloadAction<SignModalStatus>) {
+      state.signModalStatus = action.payload;
     },
   },
 });

@@ -6,6 +6,7 @@
     "reviews": "Góc review",
     "searchPlaceholder": "Tìm kiếm sách",
     "hotBooks": "Sách đang hot",
+    "bestSellingBooks": "Sách bán chạy nhất",
     "newBooks": "Sách mới cập nhật",
     "doneBooks": "Sách đã hoàn thành",
     "readingBooks": "Sách đang đọc",
@@ -17,8 +18,20 @@
     "username": "Tên đăng nhập",
     "password": "Mật khẩu",
     "fullname": "Tên đầy đủ",
+    "inStock": "Còn hàng",
+    "outStock": "Liên hệ",
     "repeatPassword": "Nhập lại mật khẩu",
     "email": "Email",
+    "showmore": "Xem thêm",
+    "product":"Sản phẩm",
+    "unitPrice": "Đơn giá",
+    "amount": "Số lượng",
+    "productPrice": "Số tiền",
+    "action": "Thao tác",
+    "apply": "Áp dụng",
+    "accept": "Xác nhận",
+    "back": "Trở lại",
+    "filter": "Bộ lọc",
     "usernameRequired": "Tên đăng nhập không được để trống",
     "passwordRequired": "Mật khẩu không được để trống",
     "emailRequired": "Email không được để trống",
@@ -26,18 +39,88 @@
     "repeatPasswordRequired": "Vui lòng nhập lại mật khẩu",
     "emailNotValid": "Email không hợp lệ",
     "not_signed": "Bạn chưa đăng nhập",
-    "server_error": "Lỗi máy chủ"
+    "server_error": "Lỗi máy chủ",
+    "unexpected_error": "Lỗi không xác định",
+    "backToHome": "Về trang chủ"
   },
   "enums": {
     "ALL": "Tất cả",
     "HOT": "Hot",
     "NEW": "New",
-    "FULL": "Full"
+    "FULL": "Full",
+    "INCART": "Đã thêm vào giỏ",
+    "ORDERED": "Đã đặt hàng",
+    "DELIVERING": "Đang giao",
+    "DONE": "Hoàn thành",
+    "CANCEL": "Đã hủy",
+    "REPAY": "Trả hàng"
   },
   "auth": {
     "username_not_correct": "Tên tài khoản không chính xác",
     "password_not_correct": "Mật khẩu không chính xác",
     "server_error": "Lỗi máy chủ",
     "loginSuccess": "Chào mừng bạn"
+  },
+  "product":{
+    "detailProduct": "Chi tiết sản phẩm",
+    "description": "Mô tả"
+  },
+  "discount": {
+    "exp": "Hạn sử dụng:"
+  },
+  "order":{
+    "alreadyBoughtOrder": "Đơn đã mua",
+    "cart": "Giỏ hàng",
+    "addToCart" : "Thêm vào giỏ hàng",
+    "callToOrder" : "Gọi điện đặt hàng:",
+    "buyNow" : "Mua ngay",
+    "amount": "Số lượng:",
+    "cartNote": "Nhấn vào mục mã giảm giá để nhận thêm ưu đãi bạn nhé!",
+    "selectOrInputCoupon": "Chọn hoặc nhập mã",
+    "selectedCoupon": "Đã chọn mã",
+    "notSelectedCoupon": "Chưa chọn mã nào",
+    "checkout": "Đặt hàng",
+    "totalPay": "Tổng thanh toán",
+    "selectCoupon": "Chọn mã giảm giá",
+    "inputBookCode": "Nhập mã",
+    "saleForOrder": "Giảm {{orderDiscountPrice}} cho đơn hàng",
+    "inforOrder": "Thông tin đặt hàng",
+    "addressReceived":"Địa chỉ nhận hàng",
+    "checkoutType": "Hình thức thanh toán",
+    "cod": "Thanh toán khi nhận hàng",
+    "checkoutNow": "Thanh toán ngay",
+    "orderSuccess": "Đặt hàng thành công",
+    "letsBuy": "Mua sắm ngay",
+    "orderCode": "Mã đơn hàng: {{orderCode}}",
+    "orderPrices": "Tổng tiền hàng",
+    "beSold": "Được giảm",
+    "toCash": "Thành tiền"
+  },
+  "detailBook":{
+    "categories": "Thể loại: {{categories}}",
+    "author": "Tác giả: ",
+    "defaultPrice": "Giá gốc: {{defaultPrice}}",
+    "status": "Tình trạng: ",
+    "saving": "Tiết kiệm: ",
+    "introduceProduct": "Giới thiệu sản phẩm",
+    "noDescription": "Chưa có mô tả cho cuốn sách này"
+    
+  },
+  "listBooks":{
+    "titleSearchFor": "Kết quả tìm kiếm cho \"{{searchKey}}\"",
+    "defaultTitle": "Danh sách sản phẩm",
+    "descOrder": "Giá giảm dần",
+    "ascOrder": "Giá tăng dần"
+  },
+  "success":{
+    "add_product_to_cart_success": "Đã thêm vào giỏ hàng"
+  },
+  "error":{
+    "bad_request": "Yêu cầu không hợp lệ",
+    "server_error": "Lỗi máy chủ",
+    "unexpected_error": "Lỗi không xác định",
+    "token_not_valid": "Vui lòng đăng nhập lại",
+    "get_detail_cart_failure": "Lấy thông tin giỏ hàng không thành công",
+    "add_product_to_cart_failure": "Thêm sản phẩm vào giỏ không thành công"
   }
 }

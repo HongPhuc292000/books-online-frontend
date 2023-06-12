@@ -1,5 +1,3 @@
-import { UserRole } from "./enums";
-
 export interface LoginRequest {
   username: string;
   password: string;
@@ -15,4 +13,9 @@ export interface RegisterRequest {
   password: string;
   fullname: string;
   email: string;
+}
+
+export interface SignModalStatus {
+  show: boolean;
+  login: boolean;
 }
