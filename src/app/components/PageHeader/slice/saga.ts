@@ -3,6 +3,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import authService from "services/auth";
 import userService from "services/user";
 import {
+  AddEditCustomerRequest,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
@@ -16,6 +17,7 @@ import {
   setCookie,
 } from "utils/cookies";
 import { authActions as actions } from ".";
+import commonService from "services/common";
 
 function* login(
   action: PayloadAction<LoginRequest, string, (error?: any) => void>
@@ -90,9 +92,46 @@ function* getUserInfo(
   }
 }
 
+function* editCustomer(
+  action: PayloadAction<
+    {
+      id: string;
+      formData: AddEditCustomerRequest;
+      file: null | File;
+    },
+    string,
+    (error?: any) => void
+  >
+) {
+  try {
+    const { id, formData, file } = action.payload;
+    if (file) {
+      const newUrl: string = yield call(
+        commonService.uploadImage,
+        file,
+        "customers"
+      );
+      yield call(userService.editUser, id, {
+        ...formData,
+        imageUrl: newUrl,
+      });
+    } else {
+      yield call(userService.editUser, id, formData);
+    }
+    action.meta();
+  } catch (error: any) {
+    if (error.response.data) {
+      action.meta(error.response.data);
+    } else {
+      action.meta("edit_detail_user_failure");
+    }
+  }
+}
+
 export function* authSaga() {
   yield takeLatest(actions.login.type, login);
   yield takeLatest(actions.register.type, register);
   yield takeLatest(actions.logout.type, logout);
   yield takeLatest(actions.getUserInfo.type, getUserInfo);
+  yield takeLatest(actions.editCustomer.type, editCustomer);
 }

@@ -5,6 +5,8 @@ import detailBookReducer from "app/pages/DetailBook/slice";
 import cartReducer from "app/pages/Cart/slice";
 import listBooksReducer from "app/pages/ListProducts/slice";
 import checkoutSuccessReducer from "app/pages/CheckoutSuccess/slice";
+import listOrdersReducer from "app/pages/ListOrders/slice";
+import detailOrderReducer from "app/pages/DetailOrder/slice";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./rootSaga";
 
@@ -17,6 +19,8 @@ export const store = configureStore({
     cartState: cartReducer,
     listBooksState: listBooksReducer,
     checkoutSuccessStateState: checkoutSuccessReducer,
+    listOrderState: listOrdersReducer,
+    detailOrderState: detailOrderReducer,
   },
   middleware: [sagaMiddleware],
 });

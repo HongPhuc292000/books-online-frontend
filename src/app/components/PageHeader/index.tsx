@@ -37,6 +37,8 @@ import { authActions } from "./slice";
 import { selectAuth } from "./slice/selector";
 import { listBooksActions } from "app/pages/ListProducts/slice";
 import { selectListBooks } from "app/pages/ListProducts/slice/selector";
+import BaseActionDialog from "../ActionDialog/BaseActionDialog";
+import EditProfile from "./components/EditProfile";
 
 const Search = styled("div")(({ theme }) => ({
   "position": "relative",
@@ -81,6 +83,12 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [searchKey, setSearchKey] = useState<string>("");
 
+  const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
+
+  const handleCloseDialog = () => {
+    setShowDetailModal(false);
+  };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -100,9 +108,14 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
     );
   };
 
-  const handleSelectUserMenu = (link: string) => {
+  const handleSelectUserMenu = (type: string) => {
     handleCloseUserMenu();
-    navigate(link);
+    if (type === "order") {
+      navigate("/order/list");
+    }
+    if (type === "profile") {
+      setShowDetailModal(true);
+    }
   };
 
   const handleOpenSignModal = (login?: boolean) => {
@@ -288,16 +301,16 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting.title}
-                  onClick={() => handleSelectUserMenu(setting.link)}
-                >
-                  <Typography textAlign="center">
-                    {t(`common.${setting.title}`)}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={() => handleSelectUserMenu("profile")}>
+                <Typography textAlign="center">
+                  {t("common.profile")}
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleSelectUserMenu("order")}>
+                <Typography textAlign="center">
+                  {t("order.alreadyBoughtOrder")}
+                </Typography>
+              </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <Typography textAlign="center">{t("common.logout")}</Typography>
               </MenuItem>
@@ -305,6 +318,7 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
           </Box>
         </Toolbar>
       </Container>
+
       {/* Do latter */}
       <Box style={{ backgroundColor: theme.palette.common.white }}>
         <Container>
@@ -314,6 +328,14 @@ const PageHeader = ({ setLoading }: PageHeaderProps) => {
           </Grid>
         </Container>
       </Box>
+
+      <BaseActionDialog
+        title={t("user.profileInfo")}
+        isOpen={showDetailModal}
+        dialogContent={<EditProfile onCloseDialog={handleCloseDialog} />}
+        onCancel={handleCloseDialog}
+        maxWidth="md"
+      />
     </AppBar>
   );
 };

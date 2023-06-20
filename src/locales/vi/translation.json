@@ -41,7 +41,14 @@
     "not_signed": "Bạn chưa đăng nhập",
     "server_error": "Lỗi máy chủ",
     "unexpected_error": "Lỗi không xác định",
-    "backToHome": "Về trang chủ"
+    "backToHome": "Về trang chủ",
+    "acceptCancel": "Xác nhận hủy",
+    "edit": "Cập nhật",
+    "reset": "Đặt lại",
+    "close": "Đóng",
+    "gender": "Giới tính",
+    "hideaway": "Ẩn bớt",
+    "all": "Tất cả"
   },
   "enums": {
     "ALL": "Tất cả",
@@ -53,7 +60,10 @@
     "DELIVERING": "Đang giao",
     "DONE": "Hoàn thành",
     "CANCEL": "Đã hủy",
-    "REPAY": "Trả hàng"
+    "REPAY": "Trả hàng",
+    "MALE": "Nam",
+    "FEMALE": "Nữ",
+    "OTHER": "Khác"
   },
   "auth": {
     "username_not_correct": "Tên tài khoản không chính xác",
@@ -69,7 +79,7 @@
     "exp": "Hạn sử dụng:"
   },
   "order":{
-    "alreadyBoughtOrder": "Đơn đã mua",
+    "alreadyBoughtOrder": "Đơn mua",
     "cart": "Giỏ hàng",
     "addToCart" : "Thêm vào giỏ hàng",
     "callToOrder" : "Gọi điện đặt hàng:",
@@ -94,7 +104,15 @@
     "orderCode": "Mã đơn hàng: {{orderCode}}",
     "orderPrices": "Tổng tiền hàng",
     "beSold": "Được giảm",
-    "toCash": "Thành tiền"
+    "toCash": "Thành tiền",
+    "listOrders": "Danh sách đơn mua", 
+    "status": "Trạng thái",
+    "noDataFound": "Không tìm thấy bản ghi phù hợp",
+    "acceptCancelOrder":"Bạn chắc chắn muốn hủy đơn hàng này chứ?",
+    "cancelOrderSuccess": "Đã hủy đơn hàng",
+    "addressReceivedRequired": "Địa chỉ nhận hàng không được để trống",
+    "usedCoupon": "Đã dùng: {{used}}, ",
+    "checkedOut": "Đã thanh toán"
   },
   "detailBook":{
     "categories": "Thể loại: {{categories}}",
@@ -103,17 +121,31 @@
     "status": "Tình trạng: ",
     "saving": "Tiết kiệm: ",
     "introduceProduct": "Giới thiệu sản phẩm",
-    "noDescription": "Chưa có mô tả cho cuốn sách này"
-    
+    "noDescription": "Chưa có mô tả cho cuốn sách này",
+    "sameAuthor": "Cùng tác giả",
+    "bestSelling": "Bán chạy"
   },
   "listBooks":{
     "titleSearchFor": "Kết quả tìm kiếm cho \"{{searchKey}}\"",
     "defaultTitle": "Danh sách sản phẩm",
+    "order": "Sắp xếp",
     "descOrder": "Giá giảm dần",
     "ascOrder": "Giá tăng dần"
   },
+  "user": {
+    "fullnameRequired": "Tên đầy đủ không được để trống",
+    "phoneNotValid": "Số điện thoại không hợp lệ",
+    "emailNotValid":"Email không hợp lệ",
+    "phoneNumber": "Số điện thoại",
+    "fullname":"Tên đầy đủ",
+    "username":"Tên đăng nhập",
+    "password":"Mật khẩu",
+    "birthday": "Năm sinh",
+    "profileInfo": "Thông tin cá nhân"
+  },
   "success":{
-    "add_product_to_cart_success": "Đã thêm vào giỏ hàng"
+    "add_product_to_cart_success": "Đã thêm vào giỏ hàng",
+    "edit_profile_success":"Cập nhật thông tin thành công"
   },
   "error":{
     "bad_request": "Yêu cầu không hợp lệ",
@@ -121,6 +153,7 @@
     "unexpected_error": "Lỗi không xác định",
     "token_not_valid": "Vui lòng đăng nhập lại",
     "get_detail_cart_failure": "Lấy thông tin giỏ hàng không thành công",
-    "add_product_to_cart_failure": "Thêm sản phẩm vào giỏ không thành công"
+    "add_product_to_cart_failure": "Thêm sản phẩm vào giỏ không thành công",
+    "edit_detail_user_failure": "Cập nhật thông tin cá nhân không thành công"
   }
 }

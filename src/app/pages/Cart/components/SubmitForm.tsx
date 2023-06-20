@@ -23,16 +23,19 @@ import { cartActions } from "../slice";
 import { withLoading } from "app/components/HOC/withLoadingPage";
 import { useLoading } from "app/hooks/useLoading";
 import useToastMessage from "app/hooks/useToastMessage";
+import { selectAuth } from "app/components/PageHeader/slice/selector";
 
 interface SubmitFormProps {
   setLoading: Function;
+  setAddressErr: Function;
 }
 
-const SubmitForm = memo(({ setLoading }: SubmitFormProps) => {
+const SubmitForm = memo(({ setLoading, setAddressErr }: SubmitFormProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { orderForm, detailCart } = useAppSelector(selectOrder);
+  const { user } = useAppSelector(selectAuth);
   const { showLoading, hideLoading } = useLoading({ setLoading });
   const { showErrorSnackbar, showSuccessSnackbar } = useToastMessage();
 
@@ -58,43 +61,68 @@ const SubmitForm = memo(({ setLoading }: SubmitFormProps) => {
     setShowDialog(false);
   }, []);
 
-  const handleSubmitOrder = () => {
-    if (detailCart && orderForm) {
+  const handleFetchDetailCart = () => {
+    if (user) {
       showLoading();
-      if (orderForm.paymentType === PaymentTypeEnum.CASH) {
-        dispatch(
-          cartActions.checkoutOfflined(
-            {
-              id: detailCart._id,
-              formValue: { ...orderForm, status: OrderStatusesEnum.ORDERED },
-            },
-            (err) => {
-              if (err) {
-                hideLoading();
-                showErrorSnackbar(t(`error.${err}`));
-              } else {
-                hideLoading();
-                showSuccessSnackbar(t("order.orderSuccess"));
+      dispatch(
+        cartActions.getCartDetail(user._id, (error) => {
+          if (error) {
+            hideLoading();
+            showErrorSnackbar(t(`error.${error}`));
+          } else {
+            hideLoading();
+          }
+        })
+      );
+    }
+  };
+
+  const handleSubmitOrder = () => {
+    if (!orderForm?.customerAddress) {
+      setAddressErr(true);
+    } else {
+      if (detailCart && orderForm) {
+        showLoading();
+        if (orderForm.paymentType === PaymentTypeEnum.CASH) {
+          dispatch(
+            cartActions.checkoutOfflined(
+              {
+                id: detailCart._id,
+                formValue: {
+                  ...orderForm,
+                  status: OrderStatusesEnum.ORDERED,
+                },
+              },
+              (err) => {
+                if (err) {
+                  hideLoading();
+                  showErrorSnackbar(t(`error.${err}`));
+                } else {
+                  dispatch(cartActions.setOrderForm(undefined));
+                  handleFetchDetailCart();
+                  hideLoading();
+                  showSuccessSnackbar(t("order.orderSuccess"));
+                }
               }
-            }
-          )
-        );
-      } else {
-        dispatch(
-          cartActions.checkoutOnline(
-            {
-              id: detailCart._id,
-              formValue: { ...orderForm, status: OrderStatusesEnum.INCART },
-            },
-            (err) => {
-              if (err) {
-                hideLoading();
-                showErrorSnackbar(t(`error.${err}`));
-              } else {
+            )
+          );
+        } else {
+          dispatch(
+            cartActions.checkoutOnline(
+              {
+                id: detailCart._id,
+                formValue: { ...orderForm, status: OrderStatusesEnum.INCART },
+              },
+              (err) => {
+                if (err) {
+                  hideLoading();
+                  showErrorSnackbar(t(`error.${err}`));
+                } else {
+                }
               }
-            }
-          )
-        );
+            )
+          );
+        }
       }
     }
   };
@@ -132,25 +160,31 @@ const SubmitForm = memo(({ setLoading }: SubmitFormProps) => {
           </FormControl>
         </Grid>
         <Grid item>
-          <Grid container mb={1}>
-            <DiscountIcon color="primary" />
-            <Typography ml={1} variant="body2">
-              {t(
-                `order.${
-                  orderForm?.orderDiscountId
-                    ? "selectedCoupon"
-                    : "notSelectedCoupon"
-                }`
-              )}
-            </Typography>
+          <Grid container alignItems="center">
+            <Grid item>
+              <Grid container mr={2}>
+                <DiscountIcon color="primary" />
+                <Typography ml={1} variant="body2">
+                  {t(
+                    `order.${
+                      orderForm?.orderDiscountId
+                        ? "selectedCoupon"
+                        : "notSelectedCoupon"
+                    }`
+                  )}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Button
+                onClick={() => {
+                  setShowDialog(true);
+                }}
+              >
+                {t("order.selectOrInputCoupon")}
+              </Button>
+            </Grid>
           </Grid>
-          <Button
-            onClick={() => {
-              setShowDialog(true);
-            }}
-          >
-            {t("order.selectOrInputCoupon")}
-          </Button>
         </Grid>
       </Grid>
       <Grid container padding={2} justifyContent="right" alignItems="center">

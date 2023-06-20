@@ -1,12 +1,12 @@
 import querystring from "query-string";
-import { Book, BookFilter, Pageable } from "types";
-import { baseUrl } from "utils/constants";
-import { createService } from "./axios";
+import { OrderFilter } from "types";
 import {
   AddProductToCart,
   OrderRequest,
   RemoveProductIncart,
 } from "types/Order";
+import { baseUrl } from "utils/constants";
+import { createService } from "./axios";
 
 const instanceWithToken = createService(baseUrl);
 
@@ -54,6 +54,24 @@ const updateCheckoutSuccess = async (id: string) => {
   return response.data;
 };
 
+const getAllOrders = async (payload: OrderFilter) => {
+  const query = querystring.stringify(payload);
+  const response = await instanceWithToken.get(`v1/customerOrder?${query}`);
+  return response.data;
+};
+
+const getDetailOrder = async (id: string) => {
+  const response = await instanceWithToken.get(`v1/customerOrder/${id}`);
+  return response.data;
+};
+
+const cancelOrder = async (id: string) => {
+  const response = await instanceWithToken.put(
+    `v1/customerOrder/cancelOrder/${id}`
+  );
+  return response.data;
+};
+
 const orderServices = {
   getDetailCart,
   addProductToCart,
@@ -61,6 +79,9 @@ const orderServices = {
   checkoutOfflined,
   checkoutOnline,
   updateCheckoutSuccess,
+  getAllOrders,
+  getDetailOrder,
+  cancelOrder,
 };
 
 export default orderServices;

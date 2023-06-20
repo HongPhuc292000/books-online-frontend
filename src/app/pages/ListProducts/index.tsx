@@ -1,4 +1,3 @@
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
   Box,
   Checkbox,
@@ -10,27 +9,24 @@ import {
   MenuItem,
   Pagination,
   Select,
+  SelectChangeEvent,
   Typography,
   styled,
   useTheme,
 } from "@mui/material";
 import { SimpleCardImage } from "app/components/CardImage";
+import { withLoading } from "app/components/HOC/withLoadingPage";
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import { useLoading } from "app/hooks/useLoading";
 import useToastMessage from "app/hooks/useToastMessage";
 import { debounce } from "lodash";
 import querystring from "query-string";
-import { useCallback, useEffect, useLayoutEffect, useState, memo } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BookFilter } from "types";
 import { listBooksActions } from "./slice";
 import { selectListBooks } from "./slice/selector";
-import { useLoading } from "app/hooks/useLoading";
-import { withLoading } from "app/components/HOC/withLoadingPage";
-
-const ListBookTitle = styled(Typography)(({ theme }) => ({
-  marginBottom: theme.spacing(3),
-}));
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -54,7 +50,7 @@ const ListProducts = memo(({ setLoading }: ListProductsProps) => {
   const searchLocation = location.search;
 
   const [isInStock, setIsInStock] = useState<boolean>(false);
-  const [sortProducts, setSortProduct] = useState<number>(1);
+  const [sortProducts, setSortProduct] = useState<string>("1");
 
   const onFetchData = (params: BookFilter) => {
     showLoading();
@@ -119,12 +115,12 @@ const ListProducts = memo(({ setLoading }: ListProductsProps) => {
     );
   };
 
-  const handleChangeSortProduct = () => {
-    setSortProduct(sortProducts === 1 ? -1 : 1);
+  const handleChangeSortProduct = (event: SelectChangeEvent) => {
+    setSortProduct(event.target.value as string);
     dispatch(
       listBooksActions.setFilterListBooks({
         ...filterListBooks,
-        sort: filterListBooks?.sort === 1 ? -1 : 1,
+        sort: event.target.value as string,
       })
     );
   };
@@ -134,19 +130,10 @@ const ListProducts = memo(({ setLoading }: ListProductsProps) => {
   }, []);
 
   useEffect(() => {
-    // onFilterToQueryString({ ...filterListBooks, inStock: isInStock });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInStock]);
-
-  useEffect(() => {
-    // onFilterToQueryString({ ...filterListBooks, sort: sortProducts });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortProducts]);
-
-  useEffect(() => {
     if (filterListBooks) {
       onFilterToQueryString(filterListBooks);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterListBooks]);
 
   useEffect(() => {
@@ -163,18 +150,10 @@ const ListProducts = memo(({ setLoading }: ListProductsProps) => {
       }
       dispatch(listBooksActions.setFilterListBooks(newFilter));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // const params = querystring.parse(searchLocation, {
-    //   arrayFormat: "bracket",
-    // });
-    // const newFilter: BookFilter = filterFromQuery(params);
-    // if (filterListBooks) {
-    //   dispatch(listBooksActions.setFilterListBooks(filterListBooks));
-    // } else {
-    //   dispatch(listBooksActions.setFilterListBooks(newFilter));
-    // }
     if (filterListBooks) {
       const handleFetchData = debounce(() => onFetchData(filterListBooks), 100);
       handleFetchData();
@@ -185,22 +164,18 @@ const ListProducts = memo(({ setLoading }: ListProductsProps) => {
   useEffect(() => {
     return () => {
       dispatch(listBooksActions.getAllBooksSuccess(undefined));
-      dispatch(listBooksActions.setFilterListBooks(undefined));
+      // dispatch(listBooksActions.setFilterListBooks(undefined));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Box p={2}>
-      <Grid container spacing={2}>
-        <Grid item xs={2} sx={{ backgroundColor: theme.palette.common.white }}>
-          <ListBookTitle
-            variant="h4"
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            {t("common.filter")}
-            <FilterAltIcon />
-          </ListBookTitle>
+    <Box p={2} sx={{ backgroundColor: theme.palette.common.white }}>
+      <Grid container justifyContent="space-between" marginBottom={4}>
+        <Grid item>
+          <Typography variant="h4">{t("listBooks.defaultTitle")}</Typography>
+        </Grid>
+        <Grid item display="flex" alignItems="center">
           <FormGroup>
             <FormControlLabel
               control={<Checkbox />}
@@ -209,56 +184,48 @@ const ListProducts = memo(({ setLoading }: ListProductsProps) => {
               checked={isInStock}
             />
           </FormGroup>
-        </Grid>
-        <Grid
-          item
-          xs={10}
-          borderLeft={`1px dashed ${theme.palette.grey[300]}`}
-          sx={{ backgroundColor: theme.palette.common.white }}
-        >
-          <Grid container justifyContent="space-between" marginBottom={4}>
-            <Typography variant="h4">{t("listBooks.defaultTitle")}</Typography>
-            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-              <InputLabel id="demo-select-small-label">Age</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={sortProducts}
-                label="Age"
-                onChange={handleChangeSortProduct}
-              >
-                <MenuItem value={-1}>{t("listBooks.descOrder")}</MenuItem>
-                <MenuItem value={1}>{t("listBooks.ascOrder")}</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Box paddingRight={2}>
-            <Grid container spacing={2}>
-              {listBooks?.data
-                ? listBooks?.data.map((item) => (
-                    <Grid key={item._id} item xs={3}>
-                      <SimpleCardImage productInfo={item} />
-                    </Grid>
-                  ))
-                : null}
-            </Grid>
-          </Box>
-
-          {listBooks?.total && listBooks?.size ? (
-            <PaginationContainer>
-              <Pagination
-                count={Math.ceil(listBooks?.total / listBooks?.size)}
-                color="primary"
-                onChange={(e, value) => {
-                  handleFetchDataForPage(value);
-                }}
-                page={filterListBooks?.page ? filterListBooks?.page + 1 : 1}
-              />
-            </PaginationContainer>
-          ) : null}
+          <FormControl sx={{ ml: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-select-small-label">
+              {t("listBooks.order")}
+            </InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={sortProducts}
+              label={t("listBooks.order")}
+              onChange={handleChangeSortProduct}
+            >
+              <MenuItem value="1">{t("listBooks.ascOrder")}</MenuItem>
+              <MenuItem value="-1">{t("listBooks.descOrder")}</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
       </Grid>
+
+      <Box>
+        <Grid container spacing={2}>
+          {listBooks?.data
+            ? listBooks?.data.map((item) => (
+                <Grid key={item._id} item xs={3}>
+                  <SimpleCardImage productInfo={item} />
+                </Grid>
+              ))
+            : null}
+        </Grid>
+      </Box>
+
+      {listBooks?.total && listBooks?.size ? (
+        <PaginationContainer>
+          <Pagination
+            count={Math.ceil(listBooks?.total / listBooks?.size)}
+            color="primary"
+            onChange={(e, value) => {
+              handleFetchDataForPage(value);
+            }}
+            page={filterListBooks?.page ? filterListBooks?.page + 1 : 1}
+          />
+        </PaginationContainer>
+      ) : null}
     </Box>
   );
 });

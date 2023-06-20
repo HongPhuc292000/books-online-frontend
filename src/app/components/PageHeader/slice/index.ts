@@ -1,7 +1,7 @@
 import { AuthState } from "./types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LoginRequest, RegisterRequest, SignModalStatus } from "types";
-import { UserDetail } from "types/User";
+import { AddEditCustomerRequest, UserDetail } from "types/User";
 
 export const initialState: AuthState = {
   signModalStatus: {
@@ -46,6 +46,19 @@ export const authSlice = createSlice({
     },
     setShowSignModal(state, action: PayloadAction<SignModalStatus>) {
       state.signModalStatus = action.payload;
+    },
+    editCustomer: {
+      reducer() {},
+      prepare(
+        payload: {
+          id: string;
+          formData: AddEditCustomerRequest;
+          file: null | File;
+        },
+        meta: (error: any) => void
+      ) {
+        return { payload, meta };
+      },
     },
   },
 });

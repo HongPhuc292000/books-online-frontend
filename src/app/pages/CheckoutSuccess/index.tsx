@@ -1,18 +1,18 @@
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { withLoading } from "app/components/HOC/withLoadingPage";
-import { memo, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import querystring from "query-string";
-import { useTranslation } from "react-i18next";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { NavigateBackLabel } from "app/components/Label";
-import { useAppDispatch, useAppSelector } from "app/hooks";
-import { checkoutSuccessActions } from "./slice";
-import { useLoading } from "app/hooks/useLoading";
-import { selectCheckoutSuccess } from "./slice/selector";
-import OrderSteps from "./components/OrderSteps";
+import OrderSteps from "app/components/OrderSteps/OrderSteps";
 import ProductBought from "app/components/ProductBought";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { useLoading } from "app/hooks/useLoading";
+import querystring from "query-string";
+import { memo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 import { formatVND } from "utils";
+import { checkoutSuccessActions } from "./slice";
+import { selectCheckoutSuccess } from "./slice/selector";
 
 interface CheckoutSuccessProps {
   setLoading: Function;
@@ -41,9 +41,8 @@ const CheckoutSuccess = memo(({ setLoading }: CheckoutSuccessProps) => {
         })
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(checkoutSuccessDetail);
 
   return (
     <Box p={2} sx={{ backgroundColor: theme.palette.common.white }}>
@@ -60,7 +59,9 @@ const CheckoutSuccess = memo(({ setLoading }: CheckoutSuccessProps) => {
           {t("order.orderCode", { orderCode: params?.vnp_TxnRef })}
         </Typography>
       </Grid>
-      <OrderSteps />
+      {checkoutSuccessDetail ? (
+        <OrderSteps detailOrder={checkoutSuccessDetail} />
+      ) : null}
       <Box>
         <Typography fontWeight={600} mb={2}>
           {t("common.product")}

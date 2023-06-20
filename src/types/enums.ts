@@ -47,3 +47,9 @@ export enum DiscountTypeEnum {
   PERCENT = "PERCENT",
   CASH = "CASH",
 }
+
+export enum GenderEnum {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+  OTHER = "OTHER",
+}

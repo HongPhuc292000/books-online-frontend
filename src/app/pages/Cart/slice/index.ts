@@ -1,20 +1,13 @@
-import moment from "moment";
-import { CartState } from "./types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  Discount,
-  DiscountFilter,
-  LoginRequest,
-  Pageable,
-  RegisterRequest,
-} from "types";
+import moment from "moment";
+import { Discount, DiscountFilter, Pageable } from "types";
 import {
   AddProductToCart,
   DetailOrder,
   OrderRequest,
   RemoveProductIncart,
 } from "types/Order";
-import { UserDetail } from "types/User";
+import { CartState } from "./types";
 
 export const initialState: CartState = {
   filterCode: { page: 0, size: 10, minDate: moment().valueOf(), status: true },
@@ -30,7 +23,10 @@ export const cartSlice = createSlice({
         return { payload: customerId, meta };
       },
     },
-    getCartDetailSuccess(state, action: PayloadAction<DetailOrder>) {
+    getCartDetailSuccess(
+      state,
+      action: PayloadAction<DetailOrder | undefined>
+    ) {
       state.detailCart = action.payload;
     },
     setTotalProductInCart(state, action: PayloadAction<number>) {
@@ -48,7 +44,7 @@ export const cartSlice = createSlice({
         return { payload, meta };
       },
     },
-    setOrderForm(state, action: PayloadAction<OrderRequest>) {
+    setOrderForm(state, action: PayloadAction<OrderRequest | undefined>) {
       state.orderForm = action.payload;
     },
     getAllDiscounts: {

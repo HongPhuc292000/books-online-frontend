@@ -5,6 +5,8 @@ import { detailBookSaga } from "./pages/DetailBook/slice/saga";
 import { cartSaga } from "./pages/Cart/slice/saga";
 import { listBooksSaga } from "./pages/ListProducts/slice/saga";
 import { checkoutSuccessSaga } from "./pages/CheckoutSuccess/slice/saga";
+import { listOrdersSaga } from "./pages/ListOrders/slice/saga";
+import { detailOrderSaga } from "./pages/DetailOrder/slice/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +16,7 @@ export default function* rootSaga() {
     cartSaga(),
     listBooksSaga(),
     checkoutSuccessSaga(),
+    listOrdersSaga(),
+    detailOrderSaga(),
   ]);
 }

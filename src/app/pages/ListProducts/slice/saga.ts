@@ -1,33 +1,8 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeLatest } from "redux-saga/effects";
-import orderServices from "services/order";
-import userService from "services/user";
-import {
-  Book,
-  BookFilter,
-  Discount,
-  DiscountFilter,
-  LoginRequest,
-  LoginResponse,
-  Pageable,
-  RegisterRequest,
-  UserDetail,
-} from "types";
-import { Cookies } from "types/enums";
-import {
-  decodeTokenGetId,
-  deleteCookie,
-  getCookies,
-  setCookie,
-} from "utils/cookies";
-import { listBooksActions as actions } from ".";
-import {
-  AddProductToCart,
-  DetailOrder,
-  RemoveProductIncart,
-} from "types/Order";
-import discountService from "services/discount";
 import bookService from "services/bookServices";
+import { Book, BookFilter, Pageable } from "types";
+import { listBooksActions as actions } from ".";
 
 function* getAllBooks(
   action: PayloadAction<BookFilter, string, (error?: any) => void>

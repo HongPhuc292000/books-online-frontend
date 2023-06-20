@@ -2,7 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Book, BookFilter, Pageable } from "types";
 import { ListBooksState } from "./types";
 
-export const initialState: ListBooksState = {};
+export const initialState: ListBooksState = {
+  filterListBooks: { page: 0, size: 12 },
+};
 
 export const listBooksSlice = createSlice({
   name: "listBooks",

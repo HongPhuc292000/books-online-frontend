@@ -7,6 +7,8 @@ import DetailBook from "app/pages/DetailBook";
 import CartPage from "app/pages/Cart";
 import ListProducts from "app/pages/ListProducts";
 import CheckoutSuccess from "app/pages/CheckoutSuccess";
+import ListOrders from "app/pages/ListOrders";
+import DetailOrder from "app/pages/DetailOrder";
 
 export default function Router() {
   return useRoutes([
@@ -44,13 +46,17 @@ export default function Router() {
         {
           path: path.order,
           children: [
-            // {
-            //   path: path.inherit,
-            //   element: <CartPage />,
-            // },
+            {
+              path: path.list,
+              element: <ListOrders />,
+            },
             {
               path: path.checkoutSuccess,
               element: <CheckoutSuccess />,
+            },
+            {
+              path: path.detail,
+              element: <DetailOrder />,
             },
           ],
         },

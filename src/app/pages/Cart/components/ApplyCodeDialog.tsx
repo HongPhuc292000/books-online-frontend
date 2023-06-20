@@ -1,24 +1,24 @@
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {
   Box,
   Button,
-  Chip,
   Grid,
   Radio,
+  Slider,
   TextField,
   Typography,
   styled,
   useTheme,
 } from "@mui/material";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import { memo, useState, useEffect, useCallback } from "react";
-import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { selectOrder } from "../slice/selector";
-import { Discount } from "types";
 import moment from "moment";
+import { memo, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Discount } from "types";
 import { DiscountTypeEnum } from "types/enums";
 import { formatVND } from "utils";
 import { cartActions, initialState } from "../slice";
+import { selectOrder } from "../slice/selector";
 
 const DiscountCodeContainer = styled(Box)(({ theme }) => ({
   maxHeight: "60vh",
@@ -37,7 +37,7 @@ const DiscountCode = memo(
     handleToggleCodeTemp,
     selectedCodeTemp,
   }: DiscountCodeProps) => {
-    const { code, description, type, value, exp } = codeDetail;
+    const { code, description, type, value, exp, used, amount } = codeDetail;
     const theme = useTheme();
     const { t } = useTranslation();
 
@@ -80,9 +80,25 @@ const DiscountCode = memo(
                   : `${value}%`,
             })}
           </Typography>
-          <Typography variant="caption">
-            {t("discount.exp")}: {moment(exp).format("h:mm:ss A - DD/MM/YYYY")}
-          </Typography>
+          {used ? (
+            <Slider
+              size="small"
+              value={parseInt(((used / amount) * 100).toFixed(0))}
+            />
+          ) : null}
+          <Grid container>
+            {used ? (
+              <Typography variant="caption" mr={0.5}>
+                {t("order.usedCoupon", {
+                  used: parseInt(((used / amount) * 100).toFixed(0)) + "%",
+                })}
+              </Typography>
+            ) : null}
+
+            <Typography variant="caption">
+              {t("discount.exp")} {moment(exp).format("h:mm:ss A - DD/MM/YYYY")}
+            </Typography>
+          </Grid>
         </Grid>
         <Grid item>
           <Radio {...controlProps()} />
@@ -125,10 +141,12 @@ const ApplyCodeDialog = memo(({ handleCloseDialog }: ApplyCodeDialogProps) => {
       let totalPrices = orderForm.totalPrices;
       let discountPrice = selectedCodeTemp.value;
       if (selectedCodeTemp.type === DiscountTypeEnum.CASH) {
-        totalPrices =
-          totalOrderPrices > discountPrice
-            ? totalOrderPrices - discountPrice
-            : 0;
+        if (totalOrderPrices > discountPrice) {
+          totalPrices = totalOrderPrices - discountPrice;
+        } else {
+          totalPrices = 0;
+          discountPrice = totalOrderPrices;
+        }
       } else {
         discountPrice = totalOrderPrices * discountPrice;
         totalPrices = totalOrderPrices - discountPrice;

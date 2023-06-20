@@ -1,7 +1,6 @@
-import { DetailBookState } from "./types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Book, BookFilter, DetailBook, Filter, Pageable } from "types";
-import { AddProductToCart } from "types/Order";
+import { Book, DetailBook, Pageable } from "types";
+import { DetailBookState } from "./types";
 
 export const initialState: DetailBookState = {};
 
@@ -17,6 +16,18 @@ export const detailBookSlice = createSlice({
     },
     getDetailBookSuccess(state, action: PayloadAction<DetailBook | undefined>) {
       state.detailBook = action.payload;
+    },
+    getAllBooksSameAuthorSuccess(
+      state,
+      action: PayloadAction<Pageable<Book> | undefined>
+    ) {
+      state.listBookSameAuthor = action.payload;
+    },
+    getAllBestSellingBooksSuccess(
+      state,
+      action: PayloadAction<Pageable<Book> | undefined>
+    ) {
+      state.listBestSellingBooks = action.payload;
     },
   },
 });

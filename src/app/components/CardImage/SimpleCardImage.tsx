@@ -28,7 +28,7 @@ const SalePercentContainer = styled(Box)(({ theme }) => ({
   width: "40px",
   height: "40px",
   position: "absolute",
-  top: "-20px",
+  top: "-12px",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",

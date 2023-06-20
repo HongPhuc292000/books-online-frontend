@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import React, { memo, useEffect, useLayoutEffect } from "react";
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CartHeader from "./components/CartHeader";
 import ProductInCart from "./components/ProductIncart";
@@ -49,6 +49,7 @@ const CartPage = () => {
   const { detailCart, orderForm } = useAppSelector(selectOrder);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [addressErr, setAdressErr] = useState<boolean>(false);
 
   const handleSetDefaultOrder = () => {
     if (detailCart) {
@@ -87,6 +88,11 @@ const CartPage = () => {
   };
 
   const handleSetAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e?.target?.value) {
+      setAdressErr(false);
+    } else {
+      setAdressErr(true);
+    }
     if (orderForm) {
       dispatch(
         cartActions.setOrderForm({
@@ -103,6 +109,7 @@ const CartPage = () => {
 
   useEffect(() => {
     handleSetDefaultOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detailCart]);
 
   return (
@@ -155,6 +162,10 @@ const CartPage = () => {
                     multiline
                     value={orderForm?.customerAddress || ""}
                     onChange={handleSetAddress}
+                    error={addressErr}
+                    helperText={
+                      addressErr ? t("order.addressReceivedRequired") : ""
+                    }
                   />
                 </Grid>
               </Grid>
@@ -168,7 +179,7 @@ const CartPage = () => {
                 ))
               : null}
           </Box>
-          <SubmitForm />
+          <SubmitForm setAddressErr={setAdressErr} />
         </React.Fragment>
       ) : (
         <Box width="50%" margin="auto" textAlign="center">

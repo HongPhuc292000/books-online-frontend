@@ -1,12 +1,11 @@
 import { Box, Step, StepButton, Stepper, styled } from "@mui/material";
-import { useAppSelector } from "app/hooks";
 import React, { memo, useEffect, useState } from "react";
 import { OrderStatusesEnum } from "types/enums";
 import { useTranslation } from "react-i18next";
-import { selectCheckoutSuccess } from "../slice/selector";
+import { DetailOrder } from "types";
 
 const steps = [
-  OrderStatusesEnum.INCART,
+  // OrderStatusesEnum.INCART,
   OrderStatusesEnum.ORDERED,
   OrderStatusesEnum.CANCEL,
   OrderStatusesEnum.DELIVERING,
@@ -19,24 +18,26 @@ const StepsContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2, 1, 5, 1),
 }));
 
-const OrderSteps = memo(() => {
+interface OrderStepsProps {
+  detailOrder: DetailOrder;
+}
+
+const OrderSteps = memo(({ detailOrder }: OrderStepsProps) => {
   const { t } = useTranslation();
 
   const [activeStep, setActiveStep] = useState(0);
-  const { checkoutSuccessDetail } = useAppSelector(selectCheckoutSuccess);
-
   const handleStep = (stepIndex: number) => () => {
     setActiveStep(stepIndex);
   };
 
   useEffect(() => {
-    if (checkoutSuccessDetail?.status) {
+    if (detailOrder?.status) {
       const currentStepIndex = steps.findIndex(
-        (step) => step === checkoutSuccessDetail.status
+        (step) => step === detailOrder.status
       );
       setActiveStep(currentStepIndex >= 0 ? currentStepIndex : 0);
     }
-  }, [checkoutSuccessDetail]);
+  }, [detailOrder]);
 
   return (
     <StepsContainer>

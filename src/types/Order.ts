@@ -55,3 +55,14 @@ export interface RemoveProductIncart {
   customerId: string;
   productId: string;
 }
+
+export interface Order {
+  _id: string;
+  customerAdress: string;
+  checkout: boolean;
+  orderCode: number;
+  orderDiscountPrices: number;
+  totalPrices: number;
+  products: DetailBookByCode[];
+  status: OrderStatusesEnum;
+}

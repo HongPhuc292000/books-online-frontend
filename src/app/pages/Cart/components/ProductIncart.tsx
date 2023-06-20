@@ -1,5 +1,5 @@
+import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import {
-  Box,
   CardMedia,
   Grid,
   IconButton,
@@ -7,15 +7,13 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import ChangeAmountProduct from "app/components/ChangeAmountProduct";
 import { selectAuth } from "app/components/PageHeader/slice/selector";
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import { memo, useEffect, useState } from "react";
 import { DetailBookByCode } from "types/Order";
 import { UpdateAmountEnum } from "types/enums";
 import { formatVND } from "utils";
-import { memo, useCallback, useEffect, useState } from "react";
-import { log } from "console";
 import { cartActions } from "../slice";
 
 const ContentLabel = styled("span")(({ theme }) => ({
@@ -121,7 +119,7 @@ const ProductIncart = ({ detail }: ProductIncartProps) => {
             <CardMedia
               component="img"
               sx={{ width: "100%" }}
-              image={detail.imageUrl}
+              image={imageUrl}
               alt={`Product ${detail}`}
             />
           </Grid>

@@ -1,31 +1,15 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeLatest } from "redux-saga/effects";
+import discountService from "services/discount";
 import orderServices from "services/order";
-import userService from "services/user";
-import {
-  Discount,
-  DiscountFilter,
-  LoginRequest,
-  LoginResponse,
-  Pageable,
-  RegisterRequest,
-  UserDetail,
-} from "types";
-import { Cookies } from "types/enums";
-import {
-  decodeTokenGetId,
-  deleteCookie,
-  getCookies,
-  setCookie,
-} from "utils/cookies";
-import { cartActions as actions } from ".";
+import { Discount, DiscountFilter, Pageable } from "types";
 import {
   AddProductToCart,
   DetailOrder,
   OrderRequest,
   RemoveProductIncart,
 } from "types/Order";
-import discountService from "services/discount";
+import { cartActions as actions } from ".";
 
 function* getCartDetail(
   action: PayloadAction<string, string, (error?: any) => void>
@@ -36,6 +20,8 @@ function* getCartDetail(
       action.payload
     );
     if (typeof result === "string") {
+      yield put(actions.getCartDetailSuccess(undefined));
+      yield put(actions.setTotalProductInCart(0));
       action.meta();
     } else {
       const totalProductsInCart = result.products.length;
