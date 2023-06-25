@@ -18,7 +18,7 @@ import ProductInCart from "./components/ProductIncart";
 import SubmitForm from "./components/SubmitForm";
 import { cartActions } from "./slice";
 import { selectOrder } from "./slice/selector";
-import { PaymentTypeEnum } from "types/enums";
+import { DiscountTypeEnum, PaymentTypeEnum } from "types/enums";
 import emptyCart from "assets/images/empty-cart.png";
 import { useNavigate } from "react-router-dom";
 
@@ -46,7 +46,8 @@ const ShipAdressContainer = styled(Box)(({ theme }) => ({
 const CartPage = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { detailCart, orderForm } = useAppSelector(selectOrder);
+  const { detailCart, orderForm, selectedDiscountCode } =
+    useAppSelector(selectOrder);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [addressErr, setAdressErr] = useState<boolean>(false);
@@ -56,6 +57,7 @@ const CartPage = () => {
       const productsIncart = detailCart.products;
       let totalPrices = 0;
       let orderPrices = 0;
+      let discountPrices = 0;
       productsIncart.forEach((product) => {
         if (product?.reducedPrice) {
           totalPrices += product.amount * product.reducedPrice;
@@ -65,12 +67,21 @@ const CartPage = () => {
           orderPrices += product.amount * product.defaultPrice;
         }
       });
-      if (orderForm?.orderDiscountPrices) {
-        totalPrices =
-          totalPrices > orderForm?.orderDiscountPrices
-            ? totalPrices - orderForm?.orderDiscountPrices
-            : 0;
+      if (selectedDiscountCode) {
+        if (selectedDiscountCode.type === DiscountTypeEnum.PERCENT) {
+          discountPrices = (orderPrices * selectedDiscountCode.value) / 100;
+          totalPrices = orderPrices - discountPrices;
+        } else {
+          if (orderPrices > selectedDiscountCode.value) {
+            discountPrices = selectedDiscountCode.value;
+            totalPrices = orderPrices - discountPrices;
+          } else {
+            discountPrices = orderPrices;
+            totalPrices = 0;
+          }
+        }
       }
+
       dispatch(
         cartActions.setOrderForm({
           ...orderForm,
@@ -81,6 +92,7 @@ const CartPage = () => {
           products: detailCart.products,
           orderPrices: orderPrices,
           totalPrices: totalPrices,
+          orderDiscountPrices: discountPrices,
           status: detailCart.status,
         })
       );
@@ -105,6 +117,10 @@ const CartPage = () => {
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
+    return () => {
+      dispatch(cartActions.setSelectedDiscountCode(undefined));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

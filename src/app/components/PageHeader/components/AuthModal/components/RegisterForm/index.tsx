@@ -59,17 +59,17 @@ const RegisterForm = memo(({ onCloseModal, setLoading }: RegisterFormProps) => {
   const formik = useFormik({
     initialValues: {
       username: "",
-      email: "",
+      phoneNumber: "",
       password: "",
       repeatPassword: "",
       fullname: "",
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
-      const { username, password, email, fullname } = values;
+      const { username, password, phoneNumber, fullname } = values;
       const formValues = {
         username,
-        email,
+        phoneNumber,
         password,
         fullname,
       };
@@ -102,13 +102,15 @@ const RegisterForm = memo(({ onCloseModal, setLoading }: RegisterFormProps) => {
         }
       />
       <TextField
-        {...formik.getFieldProps("email")}
+        {...formik.getFieldProps("phoneNumber")}
         fullWidth
         required
-        label={t("common.email")}
+        label={t("user.phoneNumber")}
         margin="normal"
-        error={formik.touched.email && !!formik.errors.email}
-        helperText={formik.touched.email && t(formik.errors.email as string)}
+        error={formik.touched.phoneNumber && !!formik.errors.phoneNumber}
+        helperText={
+          formik.touched.phoneNumber && t(formik.errors.phoneNumber as string)
+        }
       />
       <PasswordField
         formik={formik}

@@ -8,4 +8,5 @@ export interface CartState {
   orderForm?: OrderRequest;
   listCodesForOrder?: Pageable<Discount>;
   filterCode: DiscountFilter;
+  selectedDiscountCode?: Discount;
 }

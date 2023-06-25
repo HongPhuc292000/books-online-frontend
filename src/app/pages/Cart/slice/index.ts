@@ -59,6 +59,12 @@ export const cartSlice = createSlice({
     setFilterCode(state, action: PayloadAction<DiscountFilter>) {
       state.filterCode = action.payload;
     },
+    setSelectedDiscountCode(
+      state,
+      action: PayloadAction<Discount | undefined>
+    ) {
+      state.selectedDiscountCode = action.payload;
+    },
     checkoutOfflined: {
       reducer() {},
       prepare(

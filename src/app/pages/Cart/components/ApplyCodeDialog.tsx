@@ -19,6 +19,7 @@ import { DiscountTypeEnum } from "types/enums";
 import { formatVND } from "utils";
 import { cartActions, initialState } from "../slice";
 import { selectOrder } from "../slice/selector";
+import _ from "lodash";
 
 const DiscountCodeContainer = styled(Box)(({ theme }) => ({
   maxHeight: "60vh",
@@ -148,7 +149,7 @@ const ApplyCodeDialog = memo(({ handleCloseDialog }: ApplyCodeDialogProps) => {
           discountPrice = totalOrderPrices;
         }
       } else {
-        discountPrice = totalOrderPrices * discountPrice;
+        discountPrice = (totalOrderPrices * discountPrice) / 100;
         totalPrices = totalOrderPrices - discountPrice;
       }
       dispatch(
@@ -159,8 +160,22 @@ const ApplyCodeDialog = memo(({ handleCloseDialog }: ApplyCodeDialogProps) => {
           totalPrices,
         })
       );
+      dispatch(cartActions.setSelectedDiscountCode(selectedCodeTemp));
       handleCloseDialog();
-    } else {
+    } else if (orderForm) {
+      const totalPrices = orderForm.orderPrices;
+      const newOrderForm = _.omit(orderForm, [
+        "orderDiscountId",
+        "orderDiscountPrices",
+      ]);
+      dispatch(
+        cartActions.setOrderForm({
+          ...newOrderForm,
+          totalPrices,
+        })
+      );
+      dispatch(cartActions.setSelectedDiscountCode(undefined));
+      handleCloseDialog();
     }
   };
 

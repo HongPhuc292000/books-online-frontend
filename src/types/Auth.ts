@@ -12,7 +12,7 @@ export interface RegisterRequest {
   username: string;
   password: string;
   fullname: string;
-  email: string;
+  phoneNumber: string;
 }
 
 export interface SignModalStatus {
